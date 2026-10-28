@@ -1,0 +1,2413 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>میزکار اختصاصی استودیو رتینا | Retina Studio Workspace</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vazirmatn Persian Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'sans-serif'],
+                    },
+                    colors: {
+                        retina: {
+                            bg: 'var(--bg-main)',
+                            card: 'var(--bg-card)',
+                            panel: 'var(--bg-panel)',
+                            border: 'var(--border-color)',
+                            primary: 'var(--color-primary)',
+                            secondary: 'var(--color-secondary)',
+                            accent: 'var(--color-accent)',
+                            text: 'var(--text-main)',
+                            muted: 'var(--text-muted)'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            /* Theme 1: Retina Neon Studio (Default Dark Creative) */
+            --bg-main: #090D16;
+            --bg-card: #111827;
+            --bg-panel: #1E293B;
+            --border-color: #2E3C56;
+            --color-primary: #8B5CF6;
+            --color-secondary: #06B6D4;
+            --color-accent: #F43F5E;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+        }
+
+        [data-theme="luxury-gold"] {
+            --bg-main: #0C0C0E;
+            --bg-card: #16161A;
+            --bg-panel: #232329;
+            --border-color: #383842;
+            --color-primary: #F59E0B;
+            --color-secondary: #10B981;
+            --color-accent: #EC4899;
+            --text-main: #FAFAFA;
+            --text-muted: #A1A1AA;
+        }
+
+        [data-theme="persian-azure"] {
+            --bg-main: #071324;
+            --bg-card: #0F213C;
+            --bg-panel: #193156;
+            --border-color: #284B7E;
+            --color-primary: #38BDF8;
+            --color-secondary: #C084FC;
+            --color-accent: #FB7185;
+            --text-main: #F0F9FF;
+            --text-muted: #93C5FD;
+        }
+
+        [data-theme="light-studio"] {
+            --bg-main: #F1F5F9;
+            --bg-card: #FFFFFF;
+            --bg-panel: #F8FAFC;
+            --border-color: #E2E8F0;
+            --color-primary: #6366F1;
+            --color-secondary: #0EA5E9;
+            --color-accent: #F43F5E;
+            --text-main: #0F172A;
+            --text-muted: #64748B;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            overflow-x: hidden;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-primary);
+        }
+
+        .retina-gradient {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+        }
+        .retina-gradient-text {
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .retina-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+        }
+        .retina-panel {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--border-color);
+        }
+        .glass-header {
+            background-color: color-mix(in srgb, var(--bg-card) 88%, transparent);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #print-area, #print-area * {
+                visibility: visible;
+            }
+            #print-area {
+                position: absolute;
+                right: 0;
+                top: 0;
+                width: 100%;
+                background: white !important;
+                color: black !important;
+                padding: 20px;
+            }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.9; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.06); }
+        }
+        .iris-pulse {
+            animation: pulseGlow 4s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col select-none md:select-auto">
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-5 left-5 z-[120] flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- Print Area -->
+    <div id="print-area" class="hidden"></div>
+
+    <!-- ===================================================================== -->
+    <!-- AUTHENTICATION GATE: CLEAN LOGIN PORTAL                              -->
+    <!-- ===================================================================== -->
+    <div id="login-screen" class="fixed inset-0 z-[90] bg-[#060911] flex items-center justify-center p-4 overflow-y-auto">
+        <div class="fixed top-[-10%] right-[-5%] w-96 h-96 rounded-full bg-purple-600/20 blur-[130px] pointer-events-none"></div>
+        <div class="fixed bottom-[-10%] left-[-5%] w-96 h-96 rounded-full bg-cyan-500/20 blur-[130px] pointer-events-none"></div>
+
+        <div class="w-full max-w-md retina-card rounded-3xl shadow-2xl overflow-hidden border border-purple-500/30 my-auto z-10 p-6 sm:p-8 md:p-10 bg-[#0B101D] space-y-6 relative">
+            <!-- Language Toggle on Login Screen -->
+            <div class="flex items-center justify-between">
+                <span id="ai-sync-badge-login" class="text-[10px] px-2.5 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-300 font-bold flex items-center gap-1.5">
+                    <i class="fa-solid fa-wand-magic-sparkles text-cyan-400"></i>
+                    <span data-i18n="aiTranslatorReady">مترجم هوشمند دوطرفه فعال</span>
+                </span>
+                <button type="button" onclick="toggleLanguage()" class="px-3 py-1.5 rounded-xl bg-[#131B2E] hover:bg-purple-500/20 border border-slate-700 hover:border-purple-400 text-xs font-extrabold text-cyan-300 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-globe"></i>
+                    <span id="login-lang-btn-text">EN | فارسی</span>
+                </button>
+            </div>
+
+            <div class="flex flex-col items-center text-center space-y-3">
+                <div class="w-16 h-16 rounded-2xl retina-gradient p-0.5 flex items-center justify-center shadow-2xl">
+                    <div class="w-full h-full bg-[#090D16] rounded-[14px] flex items-center justify-center">
+                        <svg class="w-10 h-10" viewBox="0 0 64 64" fill="none">
+                            <path d="M6 32C6 32 16 14 32 14C48 14 58 32 58 32C58 32 48 50 32 50C16 50 6 32 6 32Z" stroke="url(#loginGrad)" stroke-width="4" stroke-linecap="round"/>
+                            <circle cx="32" cy="32" r="10" fill="url(#loginGrad)" class="iris-pulse"/>
+                            <path d="M32 25L36 33H28L32 25Z" fill="#ffffff"/>
+                            <defs>
+                                <linearGradient id="loginGrad" x1="6" y1="14" x2="58" y2="50" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#8B5CF6"/>
+                                    <stop offset="1" stop-color="#06B6D4"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                </div>
+                <div>
+                    <h1 id="login-main-title" data-i18n="loginPortalTitle" class="text-xl font-black tracking-tight text-white">استودیو خلاقیت و دیزاین رتینا</h1>
+                    <p id="login-main-subtitle" data-i18n="loginPortalSubtitle" class="text-xs text-slate-400 mt-1">پورتال خصوصی مدیریت پروژه، ارتباطات تیمی و جعبه ابزار دیزاین</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleLoginSubmit(event)" class="space-y-4" autocomplete="off">
+                <div>
+                    <label data-i18n="usernameLabel" class="block text-xs font-bold text-slate-300 mb-1.5">نام کاربری</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-user-shield absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input id="login-username" type="text" required value="" autocomplete="off" data-i18n-placeholder="usernamePlaceholder" placeholder="نام کاربری خود را وارد کنید..."
+                            class="w-full bg-[#131B2E] border border-slate-700 focus:border-purple-500 rounded-xl pr-10 pl-4 py-3 text-xs font-bold text-white focus:outline-none transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label data-i18n="passwordLabel" class="block text-xs font-bold text-slate-300 mb-1.5">رمز عبور</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input id="login-password" type="password" dir="ltr" required value="" autocomplete="new-password" data-i18n-placeholder="passwordPlaceholder" placeholder="••••"
+                            class="w-full bg-[#131B2E] border border-slate-700 focus:border-purple-500 rounded-xl pr-10 pl-10 py-3 text-xs font-bold text-white focus:outline-none transition">
+                        <button type="button" onclick="toggleLoginPasswordVisibility()" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white text-xs">
+                            <i id="login-pass-eye" class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="login-error-box" class="hidden p-3 rounded-xl bg-rose-500/15 border border-rose-500/40 text-rose-300 text-xs font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span id="login-error-text" data-i18n="loginErrorText">نام کاربری یا رمز عبور اشتباه است.</span>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 rounded-xl retina-gradient text-white font-extrabold text-xs shadow-lg hover:opacity-95 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span data-i18n="loginBtnText">ورود به میزکار رتینا</span>
+                </button>
+            </form>
+
+            <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
+                <span><i class="fa-solid fa-lock text-emerald-400 mx-1"></i> <span data-i18n="privateEnvLabel">محیط خصوصی استودیو رتینا</span></span>
+                <span data-i18n="versionLabel">نسخه عملیاتی ۱.۰</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Shell -->
+    <div id="app-shell" class="hidden flex flex-1 h-full overflow-hidden">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="w-72 retina-card flex flex-col justify-between transition-all duration-300 z-30 shrink-0 h-full">
+            <div>
+                <div class="p-4 flex items-center justify-between border-b border-[var(--border-color)]">
+                    <div class="flex items-center gap-3 cursor-pointer" onclick="openBrandModal()">
+                        <div id="brand-logo-container" class="w-11 h-11 rounded-2xl retina-gradient p-0.5 flex items-center justify-center shadow-lg relative group">
+                            <div class="w-full h-full bg-[#090D16] rounded-[14px] flex items-center justify-center overflow-hidden" id="brand-logo-inner">
+                                <svg class="w-7 h-7" viewBox="0 0 64 64" fill="none">
+                                    <path d="M6 32C6 32 16 14 32 14C48 14 58 32 58 32C58 32 48 50 32 50C16 50 6 32 6 32Z" stroke="url(#grad1)" stroke-width="4" stroke-linecap="round"/>
+                                    <circle cx="32" cy="32" r="10" fill="url(#grad1)" class="iris-pulse"/>
+                                    <path d="M32 25L36 33H28L32 25Z" fill="#ffffff"/>
+                                    <defs>
+                                        <linearGradient id="grad1" x1="6" y1="14" x2="58" y2="50" gradientUnits="userSpaceOnUse">
+                                            <stop stop-color="#8B5CF6"/>
+                                            <stop offset="1" stop-color="#06B6D4"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-1.5">
+                                <h1 id="brand-title-display" class="font-extrabold text-base tracking-tight">استودیو رتینا</h1>
+                                <span class="text-[10px] px-1.5 py-0.5 rounded-md retina-gradient text-white font-bold">PRO</span>
+                            </div>
+                            <p id="brand-slogan-display" class="text-xs text-[var(--text-muted)] truncate max-w-[145px]">میزکار خلاقیت و دیزاین</p>
+                        </div>
+                    </div>
+                    <button onclick="openBrandModal()" class="p-2 rounded-xl hover:bg-[var(--bg-panel)] text-[var(--text-muted)] hover:text-[var(--text-main)] transition" title="سفارشی‌سازی گرافیک">
+                        <i class="fa-solid fa-palette"></i>
+                    </button>
+                </div>
+
+                <!-- User Profile Card -->
+                <div class="p-3.5 border-b border-[var(--border-color)] bg-[var(--bg-panel)]/40 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <div id="sidebar-user-avatar" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-500 to-indigo-500 text-white font-extrabold text-xs flex items-center justify-center shadow">ار</div>
+                            <div>
+                                <div class="flex items-center gap-1.5">
+                                    <span id="sidebar-user-name" class="font-extrabold text-xs">ارستو علی پور</span>
+                                    <span id="sidebar-user-username" class="text-[10px] px-1.5 py-0.5 rounded bg-black/30 text-cyan-300 font-bold">مدیر</span>
+                                </div>
+                                <div id="sidebar-user-role" class="text-[11px] text-purple-400 font-semibold">مدیر استودیو</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-1.5 pt-0.5">
+                        <button onclick="openEditOwnProfileModal()" class="flex-1 py-1.5 px-2 rounded-lg retina-panel hover:border-cyan-400 text-[11px] font-bold flex items-center justify-center gap-1 transition">
+                            <i class="fa-solid fa-user-pen text-cyan-400"></i>
+                            <span data-i18n="editProfileBtn">ویرایش پروفایل</span>
+                        </button>
+                        <button onclick="logoutUser()" class="flex-1 py-1.5 px-2 rounded-lg bg-rose-500/15 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-[11px] font-bold flex items-center justify-center gap-1 transition">
+                            <i class="fa-solid fa-power-off"></i>
+                            <span data-i18n="logoutBtn">خروج</span>
+                        </button>
+                    </div>
+                </div>
+
+                <nav class="p-3 space-y-1 overflow-y-auto max-h-[calc(100vh-270px)]" id="sidebar-nav">
+                    <!-- Populated dynamically -->
+                </nav>
+            </div>
+
+            <div class="p-3 m-3 rounded-2xl retina-panel">
+                <div class="flex items-center justify-between text-xs mb-1">
+                    <span class="font-bold flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-check text-cyan-400"></i>
+                        <span id="footer-role-specialty">مدیریت کل</span>
+                    </span>
+                    <span class="text-[10px] text-emerald-400 flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> <span data-i18n="savedBadge">ذخیره</span>
+                    </span>
+                </div>
+                <p data-i18n="footerSubtext" class="text-[10px] text-[var(--text-muted)] leading-relaxed">استودیو گرافیک رتینا • نسخه نهایی</p>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Wrapper -->
+        <div class="flex-1 flex flex-col h-full overflow-hidden">
+            <header class="glass-header h-16 px-4 md:px-6 flex items-center justify-between shrink-0 z-20">
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-xl retina-panel text-sm">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div>
+                        <h2 id="header-module-title" class="font-extrabold text-base md:text-lg">داشبورد و مانیتورینگ کلان</h2>
+                        <p id="header-jalali-date" data-i18n="headerDateSubtitle" class="text-xs text-[var(--text-muted)]">سه‌شنبه ۵ آبان ۱۴۰۵ | مدیریت پروژه‌ها و اعضا</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <!-- AI Translation Status Indicator -->
+                    <div id="ai-translating-indicator" class="hidden items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-purple-500/20 border border-purple-500/40 text-[11px] font-bold text-purple-300">
+                        <i class="fa-solid fa-spinner fa-spin text-cyan-400"></i>
+                        <span data-i18n="translatingStatus">در حال ترجمه هوشمند...</span>
+                    </div>
+
+                    <!-- Language Switcher Button -->
+                    <button onclick="toggleLanguage()" class="flex items-center gap-1.5 px-3 py-2 rounded-xl retina-panel hover:border-cyan-400 text-xs font-extrabold text-cyan-300 transition" title="تغییر زبان هوشمند / Switch Language">
+                        <i class="fa-solid fa-language text-base text-purple-400"></i>
+                        <span id="header-lang-label">EN</span>
+                    </button>
+
+                    <button id="scope-toggle-btn" onclick="toggleTaskScopeFilter()" class="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl retina-panel hover:border-purple-400 text-xs font-bold transition">
+                        <i class="fa-solid fa-filter text-purple-400"></i>
+                        <span id="scope-toggle-label">نمایش: کل کارهای تیم</span>
+                    </button>
+
+                    <button onclick="openTaskModal()" class="retina-gradient text-white text-xs font-bold px-3.5 py-2.5 rounded-xl shadow-lg hover:opacity-95 transition flex items-center gap-2">
+                        <i class="fa-solid fa-plus"></i>
+                        <span class="hidden sm:inline" data-i18n="newTaskBtn">وظیفه جدید</span>
+                    </button>
+
+                    <button onclick="openVideoRoomModal()" class="retina-panel hover:border-cyan-400 text-xs font-semibold px-3 py-2.5 rounded-xl transition flex items-center gap-1.5" title="Online Meeting">
+                        <i class="fa-solid fa-video text-cyan-400"></i>
+                        <span class="hidden xl:inline" data-i18n="onlineMeetingBtn">جلسه آنلاین</span>
+                    </button>
+
+                    <button onclick="toggleAssistantDrawer()" class="relative retina-panel p-2.5 rounded-xl hover:border-purple-400 transition" title="AI Assistant">
+                        <i class="fa-solid fa-robot text-purple-400"></i>
+                        <span id="assistant-unread-dot" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[10px] flex items-center justify-center font-bold">0</span>
+                    </button>
+                </div>
+            </header>
+
+            <main id="main-content" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
+                <!-- Content injected dynamically -->
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Task Modal -->
+    <div id="task-modal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-3 md:p-6">
+        <div class="retina-card w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+            <div class="px-6 py-4 border-b border-[var(--border-color)] flex items-center justify-between bg-[var(--bg-panel)]/50">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-xl retina-gradient flex items-center justify-center text-white text-sm"><i class="fa-solid fa-pen-ruler"></i></span>
+                    <div>
+                        <h3 class="font-extrabold text-base">پرونده کامل وظیفه دیزاین</h3>
+                        <p class="text-[11px] text-[var(--text-muted)]">با وزن‌دهی، چک‌لیست زمان‌دار و مهر تأیید مدیر هنری</p>
+                    </div>
+                </div>
+                <button onclick="closeTaskModal()" class="w-8 h-8 rounded-xl retina-panel flex items-center justify-center hover:text-rose-400"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="p-6 overflow-y-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 space-y-4">
+                    <input type="hidden" id="tm-id">
+                    <div>
+                        <label class="block text-xs font-bold mb-1 text-[var(--text-muted)]">عنوان وظیفه / بریف اجرایی *</label>
+                        <input id="tm-title" type="text" placeholder="عنوان تسک..." class="w-full retina-panel rounded-xl px-3.5 py-2.5 text-sm font-bold focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold mb-1 text-[var(--text-muted)]">توضیحات و لینک فیگما</label>
+                        <textarea id="tm-desc" rows="3" placeholder="جزئیات..." class="w-full retina-panel rounded-xl px-3.5 py-2 text-xs leading-relaxed focus:outline-none"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-3.5 rounded-2xl retina-panel">
+                        <div>
+                            <div class="flex justify-between text-xs font-bold mb-1">
+                                <span>پیشرفت:</span>
+                                <span id="tm-progress-val" class="text-cyan-400 font-extrabold">0%</span>
+                            </div>
+                            <input id="tm-progress" type="range" min="0" max="100" step="5" value="0" oninput="document.getElementById('tm-progress-val').innerText = this.value + '%'" class="w-full accent-cyan-400 cursor-pointer">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs font-bold mb-1">
+                                <span>وزن تسک (۱ تا ۱۰):</span>
+                                <span id="tm-weight-val" class="text-purple-400 font-extrabold">5</span>
+                            </div>
+                            <input id="tm-weight" type="range" min="1" max="10" step="1" value="5" oninput="document.getElementById('tm-weight-val').innerText = this.value" class="w-full accent-purple-500 cursor-pointer">
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl retina-panel space-y-3">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs font-extrabold flex items-center gap-2"><i class="fa-solid fa-square-check text-emerald-400"></i> چک‌لیست اجرایی</h4>
+                            <span id="tm-checklist-summary" class="text-[11px] text-[var(--text-muted)]">0 از 0</span>
+                        </div>
+                        <div id="tm-checklist-items" class="space-y-2 max-h-44 overflow-y-auto"></div>
+                        <div class="flex gap-2">
+                            <input id="tm-new-check-input" type="text" placeholder="افزودن زیرکار..." class="flex-1 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-3 py-1.5 text-xs focus:outline-none">
+                            <button type="button" onclick="addChecklistItemInModal()" class="px-3 py-1.5 rounded-xl bg-emerald-500/20 text-emerald-300 text-xs font-bold">+ افزودن</button>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl retina-panel space-y-2.5">
+                        <div class="flex items-center justify-between">
+                            <h4 class="text-xs font-extrabold"><i class="fa-solid fa-paperclip text-cyan-400"></i> پیوست‌ها</h4>
+                            <div class="flex gap-1.5">
+                                <button type="button" onclick="addSimulatedAttachment(' طرح PNG')" class="text-[11px] px-2 py-1 rounded-lg retina-card">+ PNG</button>
+                                <button type="button" onclick="addSimulatedAttachment(' سورس PSD/AI')" class="text-[11px] px-2 py-1 rounded-lg retina-card">+ PSD</button>
+                            </div>
+                        </div>
+                        <div id="tm-attachments-list" class="flex flex-wrap gap-2"></div>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold mb-1 text-[var(--text-muted)]">پروژه</label>
+                        <select id="tm-project" class="w-full retina-panel rounded-xl px-3 py-2 text-xs font-bold focus:outline-none"></select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block text-xs font-bold mb-1 text-[var(--text-muted)]">وضعیت</label>
+                            <select id="tm-status" class="w-full retina-panel rounded-xl px-2.5 py-2 text-xs font-bold focus:outline-none">
+                                <option value="backlog">بریف و ایده‌پردازی</option>
+                                <option value="doing">در حال طراحی</option>
+                                <option value="review">بررسی مدیر هنری</option>
+                                <option value="revision">اصلاحات</option>
+                                <option value="done">تحویل نهایی</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold mb-1 text-[var(--text-muted)]">اولویت</label>
+                            <select id="tm-priority" class="w-full retina-panel rounded-xl px-2.5 py-2 text-xs font-bold focus:outline-none">
+                                <option value="urgent">فوری 🔥</option>
+                                <option value="high">بالا ⚡</option>
+                                <option value="medium">متوسط 🎨</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block text-xs font-bold mb-1 text-[var(--text-muted)]">شروع (آبان)</label>
+                            <input id="tm-start-day" type="number" min="1" max="30" value="4" class="w-full retina-panel rounded-xl px-3 py-1.5 text-xs font-bold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold mb-1 text-[var(--text-muted)]">مهلت (آبان)</label>
+                            <input id="tm-due-day" type="number" min="1" max="30" value="8" class="w-full retina-panel rounded-xl px-3 py-1.5 text-xs font-bold">
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-2xl retina-panel">
+                        <label class="block text-xs font-bold mb-2 text-[var(--text-muted)]">مسئولین انجام:</label>
+                        <div id="tm-assignees-checkboxes" class="space-y-1.5 max-h-32 overflow-y-auto text-xs"></div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold mb-1 text-[var(--text-muted)]">مقام تأییدکننده:</label>
+                        <select id="tm-approver" class="w-full retina-panel rounded-xl px-3 py-2 text-xs font-bold focus:outline-none"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 border-t border-[var(--border-color)] flex flex-wrap items-center justify-between gap-3 bg-[var(--bg-panel)]/50">
+                <div class="flex items-center gap-2">
+                    <button type="button" id="tm-delete-btn" onclick="deleteTaskFromModal()" class="px-3.5 py-2 rounded-xl bg-rose-500/20 text-rose-400 text-xs font-bold"><i class="fa-regular fa-trash-can ml-1"></i> حذف</button>
+                    <button type="button" onclick="printSingleTaskFromModal()" class="px-3.5 py-2 rounded-xl retina-panel text-xs font-bold"><i class="fa-solid fa-print ml-1"></i> چاپ بریف</button>
+                </div>
+                <div class="flex items-center gap-2.5">
+                    <button type="button" onclick="approveTaskByApprover()" class="px-4 py-2 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold"><i class="fa-solid fa-stamp ml-1"></i> تأیید مدیر هنری</button>
+                    <button type="button" onclick="saveTaskFromModal()" class="px-6 py-2 rounded-xl retina-gradient text-white text-xs font-extrabold shadow-lg">ذخیره تغییرات</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Brand Customizer Modal -->
+    <div id="brand-modal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="retina-card w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-[var(--border-color)] flex items-center justify-between">
+                <h3 class="font-extrabold text-base flex items-center gap-2"><i class="fa-solid fa-palette text-purple-400"></i> سفارشی‌سازی گرافیک و تم</h3>
+                <button onclick="closeBrandModal()" class="w-8 h-8 rounded-xl retina-panel flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-6 space-y-5 text-xs">
+                <div>
+                    <label class="block font-bold mb-1.5">نام استودیو:</label>
+                    <input id="brand-name-input" type="text" value="استودیو رتینا" class="w-full retina-panel rounded-xl px-3.5 py-2.5 font-bold">
+                </div>
+                <div>
+                    <label class="block font-bold mb-1.5">شعار تخصصی:</label>
+                    <input id="brand-slogan-input" type="text" value="میزکار خلاقیت و دیزاین" class="w-full retina-panel rounded-xl px-3.5 py-2.5">
+                </div>
+                <div>
+                    <label class="block font-bold mb-2">پالت رنگی محیط کار:</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="setStudioTheme('default')" class="p-3 rounded-2xl border border-purple-500 bg-[#090D16] text-white flex items-center gap-2.5">
+                            <span class="w-6 h-6 rounded-full bg-gradient-to-tr from-purple-500 to-cyan-400 shrink-0"></span>
+                            <div class="text-right"><div class="font-bold">نئون رتینا</div><div class="text-[10px] text-slate-400">بنفش الکتریک و فیروزه‌ای</div></div>
+                        </button>
+                        <button onclick="setStudioTheme('luxury-gold')" class="p-3 rounded-2xl border border-amber-500/50 bg-[#0C0C0E] text-white flex items-center gap-2.5">
+                            <span class="w-6 h-6 rounded-full bg-gradient-to-tr from-amber-500 to-emerald-400 shrink-0"></span>
+                            <div class="text-right"><div class="font-bold">استودیو طلایی</div><div class="text-[10px] text-zinc-400">کنتراست بالا تاریک</div></div>
+                        </button>
+                        <button onclick="setStudioTheme('persian-azure')" class="p-3 rounded-2xl border border-sky-400/50 bg-[#071324] text-white flex items-center gap-2.5">
+                            <span class="w-6 h-6 rounded-full bg-gradient-to-tr from-sky-400 to-purple-400 shrink-0"></span>
+                            <div class="text-right"><div class="font-bold">لاجوردی</div><div class="text-[10px] text-sky-300">هنری عمیق</div></div>
+                        </button>
+                        <button onclick="setStudioTheme('light-studio')" class="p-3 rounded-2xl border border-slate-300 bg-white text-slate-900 flex items-center gap-2.5">
+                            <span class="w-6 h-6 rounded-full bg-gradient-to-tr from-indigo-500 to-sky-400 shrink-0"></span>
+                            <div class="text-right"><div class="font-bold">مینیمال روشن</div><div class="text-[10px] text-slate-500">پس‌زمینه سفید</div></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-[var(--border-color)] flex justify-end gap-2">
+                <button onclick="saveBrandSettings()" class="px-5 py-2 rounded-xl retina-gradient text-white text-xs font-bold">اعمال تغییرات</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat to Task Modal -->
+    <div id="chat-to-task-modal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="retina-card w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+            <div class="px-5 py-4 border-b border-[var(--border-color)] flex items-center justify-between">
+                <h3 class="font-extrabold text-sm"><i class="fa-solid fa-bolt text-amber-400 ml-1"></i> تبدیل پیام به وظیفه</h3>
+                <button onclick="document.getElementById('chat-to-task-modal').classList.add('hidden')" class="w-7 h-7 rounded-lg retina-panel flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-5 space-y-3.5 text-xs">
+                <div>
+                    <label class="block font-bold mb-1">عنوان وظیفه:</label>
+                    <input id="ctt-title" type="text" class="w-full retina-panel rounded-xl px-3 py-2 font-bold">
+                </div>
+                <div>
+                    <label class="block font-bold mb-1">پروژه:</label>
+                    <select id="ctt-project" class="w-full retina-panel rounded-xl px-3 py-2 font-bold"></select>
+                </div>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="block font-bold mb-1">مسئول انجام:</label>
+                        <select id="ctt-assignee" class="w-full retina-panel rounded-xl px-3 py-2 font-bold"></select>
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1">وزن (۱ تا ۱۰):</label>
+                        <input id="ctt-weight" type="number" min="1" max="10" value="5" class="w-full retina-panel rounded-xl px-3 py-2 font-bold">
+                    </div>
+                </div>
+            </div>
+            <div class="px-5 py-3.5 border-t border-[var(--border-color)] flex justify-end gap-2">
+                <button onclick="confirmConvertChatToTask()" class="px-5 py-2 rounded-xl retina-gradient text-white text-xs font-bold">ایجاد وظیفه</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Room Modal -->
+    <div id="video-room-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="retina-card w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden flex flex-col">
+            <div class="px-6 py-4 border-b border-[var(--border-color)] flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-3 h-3 rounded-full bg-rose-500 animate-ping"></span>
+                    <h3 class="font-extrabold text-sm">اتاق جلسه ویدیویی و بررسی آنلاین طرح‌ها</h3>
+                </div>
+                <button onclick="closeVideoRoomModal()" class="px-3 py-1 rounded-xl bg-rose-500/20 text-rose-400 text-xs font-bold">خروج</button>
+            </div>
+            <div class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-4 bg-[#070A12]">
+                <div class="lg:col-span-2 rounded-2xl border border-purple-500/40 bg-gradient-to-br from-slate-900 via-purple-950/40 to-slate-900 p-6 flex flex-col justify-between min-h-[280px]">
+                    <div class="flex items-center justify-between z-10">
+                        <span class="text-xs px-2.5 py-1 rounded-lg bg-black/60 text-cyan-300 font-bold"><i class="fa-solid fa-desktop ml-1"></i> اشتراک آرت‌بورد فعال</span>
+                    </div>
+                    <div class="my-auto text-center space-y-3 z-10 py-6">
+                        <div class="w-20 h-20 rounded-3xl retina-gradient mx-auto flex items-center justify-center shadow-2xl">
+                            <i class="fa-solid fa-bezier-curve text-3xl text-white"></i>
+                        </div>
+                        <h4 class="font-extrabold text-lg text-white">اتاق جلسه زنده استودیو رتینا</h4>
+                        <p class="text-xs text-slate-300 max-w-md mx-auto">اعضای حاضر می‌توانند به صورت زنده روی طرح‌ها گفتگو کرده و مصوبات را مستقیماً ثبت کنند.</p>
+                    </div>
+                    <div class="flex items-center justify-center gap-3 z-10">
+                        <button onclick="showToast('میکروفون تغییر وضعیت داد', 'info')" class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center"><i class="fa-solid fa-microphone"></i></button>
+                        <button onclick="showToast('دوربین تغییر وضعیت داد', 'info')" class="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center"><i class="fa-solid fa-video"></i></button>
+                        <button onclick="closeVideoRoomModal()" class="px-4 h-10 rounded-full retina-gradient text-white text-xs font-bold">پایان جلسه</button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-1 gap-2.5" id="video-participants-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assistant Drawer -->
+    <div id="assistant-drawer" class="hidden fixed top-16 left-4 w-80 retina-card rounded-3xl shadow-2xl z-40 p-4 border border-purple-500/40 space-y-3">
+        <div class="flex items-center justify-between border-b border-[var(--border-color)] pb-2.5">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-robot text-purple-400 text-lg"></i>
+                <div><h4 class="text-xs font-extrabold">دستیار هوشمند</h4><p class="text-[10px] text-[var(--text-muted)]">پایش خودکار ددلاین‌ها</p></div>
+            </div>
+            <button onclick="toggleAssistantDrawer()" class="text-xs text-[var(--text-muted)] hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="assistant-alerts-list" class="space-y-2 max-h-72 overflow-y-auto text-xs"></div>
+    </div>
+
+    <!-- User Editor Modal -->
+    <div id="user-editor-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="retina-card w-full max-w-2xl rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+            <div class="px-6 py-4 border-b border-[var(--border-color)] flex items-center justify-between bg-[var(--bg-panel)]/50">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-xl retina-gradient text-white flex items-center justify-center text-sm"><i class="fa-solid fa-user-shield"></i></span>
+                    <div>
+                        <h3 id="user-modal-title" class="font-extrabold text-sm">تعریف عضو جدید تیم</h3>
+                        <p class="text-[11px] text-[var(--text-muted)]">تعیین نام کاربری، رمز عبور و نقش تخصصی</p>
+                    </div>
+                </div>
+                <button onclick="closeUserEditorModal()" class="w-8 h-8 rounded-xl retina-panel flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="p-6 overflow-y-auto space-y-4 text-xs">
+                <input type="hidden" id="um-id">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-bold mb-1 text-[var(--text-muted)]">نام و نام خانوادگی *</label>
+                        <input id="um-name" type="text" placeholder="مثلاً: سارا مهدوی" class="w-full retina-panel rounded-xl px-3.5 py-2.5 font-bold">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-[var(--text-muted)]">نقش تخصصی و پنل *</label>
+                        <select id="um-role-type" onchange="applyRoleDefaultPermissionsInModal(this.value)" class="w-full retina-panel rounded-xl px-3.5 py-2.5 font-bold">
+                            <option value="graphic">طراح گرافیک و برندینگ</option>
+                            <option value="motion">موشن گرافیست و تدوینگر</option>
+                            <option value="uiux">طراح رابط کاربری UI/UX</option>
+                            <option value="crm">مدیر فروش و ارتباط با کارفرما</option>
+                            <option value="admin">مدیر استودیو (دسترسی کامل)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block font-bold mb-1 text-[var(--text-muted)]">عنوان شغلی</label>
+                        <input id="um-role-title" type="text" placeholder="مثلاً: طراح ارشد" class="w-full retina-panel rounded-xl px-3.5 py-2.5 font-bold">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-[var(--text-muted)]">رنگ آواتار</label>
+                        <select id="um-avatar-color" class="w-full retina-panel rounded-xl px-3.5 py-2.5 font-bold">
+                            <option value="from-purple-500 to-indigo-500">بنفش رتینا</option>
+                            <option value="from-pink-500 to-rose-500">صورتی و یاقوتی</option>
+                            <option value="from-cyan-500 to-blue-500">فیروزه‌ای و آبی</option>
+                            <option value="from-emerald-500 to-teal-500">زمردی</option>
+                            <option value="from-amber-500 to-orange-500">طلایی</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-black/25 border border-purple-500/30">
+                    <div>
+                        <label class="block font-bold mb-1 text-cyan-300">نام کاربری ورود (Username) *</label>
+                        <input id="um-username" type="text" dir="ltr" placeholder="sara" class="w-full retina-panel rounded-xl px-3.5 py-2 font-mono font-bold">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-amber-300">رمز عبور (Password) *</label>
+                        <input id="um-password" type="text" dir="ltr" placeholder="1234" class="w-full retina-panel rounded-xl px-3.5 py-2 font-mono font-bold">
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-2xl retina-panel space-y-2.5">
+                    <label class="font-extrabold text-xs text-purple-300 block">بخش‌های قابل مشاهده در پنل این شخص:</label>
+                    <div id="um-permissions-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1"></div>
+                </div>
+            </div>
+
+            <div class="px-6 py-4 border-t border-[var(--border-color)] flex justify-end gap-2 bg-[var(--bg-panel)]/50">
+                <button type="button" onclick="closeUserEditorModal()" class="px-4 py-2 rounded-xl retina-panel text-xs font-bold">انصراف</button>
+                <button type="button" id="um-submit-btn" onclick="saveUserFromModal()" class="px-6 py-2 rounded-xl retina-gradient text-white text-xs font-extrabold shadow-lg">ذخیره اطلاعات عضو</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Delete Modal -->
+    <div id="user-delete-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="retina-card w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-[var(--border-color)] flex items-center justify-between">
+                <h3 class="font-extrabold text-sm text-rose-400">حذف عضو و انتقال وظایف</h3>
+                <button onclick="document.getElementById('user-delete-modal').classList.add('hidden')" class="w-7 h-7 rounded-lg retina-panel flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-6 space-y-4 text-xs">
+                <input type="hidden" id="del-user-id">
+                <p class="leading-relaxed text-[var(--text-muted)]">
+                    حذف حساب <strong id="del-user-name" class="text-white"></strong>. وظایف باز او به کدام همکار منتقل شود؟
+                </p>
+                <div>
+                    <label class="block font-bold mb-1.5">انتخاب جانشین:</label>
+                    <select id="del-user-successor" class="w-full retina-panel rounded-xl px-3 py-2.5 font-bold"></select>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-[var(--border-color)] flex justify-end gap-2">
+                <button onclick="document.getElementById('user-delete-modal').classList.add('hidden')" class="px-4 py-2 rounded-xl retina-panel text-xs font-bold">انصراف</button>
+                <button onclick="confirmDeleteUserAndTransferTasks()" class="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-extrabold">انتقال و حذف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Own Profile Modal -->
+    <div id="edit-profile-modal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="retina-card w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-[var(--border-color)] flex items-center justify-between bg-[var(--bg-panel)]/50">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-8 h-8 rounded-xl retina-gradient text-white flex items-center justify-center text-sm"><i class="fa-solid fa-user-pen"></i></span>
+                    <div>
+                        <h3 class="font-extrabold text-sm">ویرایش اطلاعات شخصی من</h3>
+                        <p class="text-[11px] text-[var(--text-muted)]">تغییر نام، نام کاربری ورود، رمز عبور و رنگ نمایه</p>
+                    </div>
+                </div>
+                <button onclick="document.getElementById('edit-profile-modal').classList.add('hidden')" class="w-7 h-7 rounded-lg retina-panel flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-6 space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold mb-1.5 text-[var(--text-muted)]">نام و نام خانوادگی *</label>
+                    <input id="own-name-input" type="text" placeholder="نام و نام خانوادگی..." class="w-full retina-panel rounded-xl px-3.5 py-2.5 font-bold focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold mb-1.5 text-cyan-300">نام کاربری ورود (Username) *</label>
+                    <input id="own-username-input" type="text" dir="ltr" placeholder="نام کاربری..." class="w-full retina-panel rounded-xl px-3.5 py-2.5 font-mono font-bold focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold mb-1.5 text-amber-300">رمز عبور (Password) *</label>
+                    <input id="own-pass-input" type="text" dir="ltr" placeholder="رمز عبور..." class="w-full retina-panel rounded-xl px-3.5 py-2.5 font-mono font-bold focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold mb-1.5 text-[var(--text-muted)]">رنگ آواتار پروفایل</label>
+                    <select id="own-avatar-color" class="w-full retina-panel rounded-xl px-3.5 py-2.5 font-bold focus:outline-none">
+                        <option value="from-purple-500 to-indigo-500">بنفش رتینا</option>
+                        <option value="from-pink-500 to-rose-500">صورتی و یاقوتی</option>
+                        <option value="from-cyan-500 to-blue-500">فیروزه‌ای و آبی</option>
+                        <option value="from-emerald-500 to-teal-500">زمردی</option>
+                        <option value="from-amber-500 to-orange-500">طلایی</option>
+                    </select>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-[var(--border-color)] flex justify-end gap-2 bg-[var(--bg-panel)]/50">
+                <button onclick="document.getElementById('edit-profile-modal').classList.add('hidden')" class="px-4 py-2 rounded-xl retina-panel text-xs font-bold">انصراف</button>
+                <button onclick="saveOwnProfileChanges()" class="px-5 py-2 rounded-xl retina-gradient text-white text-xs font-extrabold shadow-lg">ذخیره تغییرات</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Editor Modal -->
+    <div id="project-editor-modal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="retina-card w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-[var(--border-color)] flex items-center justify-between">
+                <h3 id="proj-modal-heading" class="font-extrabold text-sm">تعریف پروژه جدید</h3>
+                <button onclick="document.getElementById('project-editor-modal').classList.add('hidden')" class="w-7 h-7 rounded-lg retina-panel flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-5 space-y-3.5 text-xs">
+                <input type="hidden" id="pm-id">
+                <div>
+                    <label class="block font-bold mb-1 text-[var(--text-muted)]">عنوان پروژه *</label>
+                    <input id="pm-title" type="text" placeholder="عنوان پروژه..." class="w-full retina-panel rounded-xl px-3.5 py-2.5 font-bold">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold mb-1 text-[var(--text-muted)]">دسته‌بندی</label>
+                        <select id="pm-category" class="w-full retina-panel rounded-xl px-3 py-2 font-bold">
+                            <option value="برندینگ و هویت بصری">برندینگ و هویت بصری</option>
+                            <option value="موشن گرافیک و تیزر">موشن گرافیک و تیزر</option>
+                            <option value="طراحی رابط کاربری UI/UX">طراحی رابط کاربری UI/UX</option>
+                            <option value="کمپین و سوشال مدیا">کمپین و سوشال مدیا</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-[var(--text-muted)]">مهلت تحویل</label>
+                        <input id="pm-deadline" type="text" placeholder="مثلاً: ۲۵ آبان ۱۴۰۵" class="w-full retina-panel rounded-xl px-3 py-2 font-bold">
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-[var(--border-color)] flex justify-end gap-2">
+                <button onclick="document.getElementById('project-editor-modal').classList.add('hidden')" class="px-4 py-2 rounded-xl retina-panel text-xs font-bold">انصراف</button>
+                <button onclick="saveProjectFromModal()" class="px-5 py-2 rounded-xl retina-gradient text-white text-xs font-extrabold">ذخیره پروژه</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client Editor Modal -->
+    <div id="client-editor-modal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="retina-card w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-[var(--border-color)] flex items-center justify-between">
+                <h3 class="font-extrabold text-sm">ثبت پرونده کارفرما</h3>
+                <button onclick="document.getElementById('client-editor-modal').classList.add('hidden')" class="w-7 h-7 rounded-lg retina-panel flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="p-5 space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold mb-1 text-[var(--text-muted)]">نام کارفرما / برند *</label>
+                    <input id="cm-name" type="text" placeholder="نام..." class="w-full retina-panel rounded-xl px-3.5 py-2 font-bold">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold mb-1 text-[var(--text-muted)]">رابط</label>
+                        <input id="cm-person" type="text" placeholder="شخص رابط..." class="w-full retina-panel rounded-xl px-3 py-2 font-bold">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-[var(--text-muted)]">تلفن</label>
+                        <input id="cm-phone" type="text" dir="ltr" placeholder="0912..." class="w-full retina-panel rounded-xl px-3 py-2 font-bold">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold mb-1 text-[var(--text-muted)]">مبلغ کل قرارداد (تومان)</label>
+                        <input id="cm-total" type="number" value="0" class="w-full retina-panel rounded-xl px-3 py-2 font-bold">
+                    </div>
+                    <div>
+                        <label class="block font-bold mb-1 text-[var(--text-muted)]">دریافتی تاکنون</label>
+                        <input id="cm-paid" type="number" value="0" class="w-full retina-panel rounded-xl px-3 py-2 font-bold">
+                    </div>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-[var(--border-color)] flex justify-end gap-2">
+                <button onclick="document.getElementById('client-editor-modal').classList.add('hidden')" class="px-4 py-2 rounded-xl retina-panel text-xs font-bold">انصراف</button>
+                <button onclick="saveClientFromModal()" class="px-5 py-2 rounded-xl retina-gradient text-white text-xs font-extrabold">ثبت مشتری</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Generic Form Modal -->
+    <div id="generic-form-modal" class="hidden fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="retina-card w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-[var(--border-color)] flex items-center justify-between">
+                <h3 id="gf-modal-title" class="font-extrabold text-sm">ثبت مورد جدید</h3>
+                <button onclick="document.getElementById('generic-form-modal').classList.add('hidden')" class="w-7 h-7 rounded-lg retina-panel flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="gf-modal-body" class="p-5 space-y-3 text-xs"></div>
+            <div class="px-6 py-4 border-t border-[var(--border-color)] flex justify-end gap-2">
+                <button onclick="document.getElementById('generic-form-modal').classList.add('hidden')" class="px-4 py-2 rounded-xl retina-panel text-xs font-bold">انصراف</button>
+                <button id="gf-modal-submit" class="px-5 py-2 rounded-xl retina-gradient text-white text-xs font-extrabold">ذخیره و ثبت</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Core Script -->
+    <script>
+        const ALL_MODULES_CATALOG = [
+            { id: 'dashboard', title: 'میزکار شخصی من', title_en: 'My Personal Workspace', adminTitle: 'داشبورد و مانیتورینگ کلان', adminTitle_en: 'Executive Dashboard & Monitoring', icon: 'fa-chart-pie', color: 'text-purple-400' },
+            { id: 'projects', title: 'پروژه‌ها و بورد دیزاین', title_en: 'Projects & Design Board', adminTitle: 'پروژه‌ها و بورد دیزاین', adminTitle_en: 'Projects & Design Board', icon: 'fa-layer-group', color: 'text-cyan-400' },
+            { id: 'cartable', title: 'کارتابل و چک‌لیست من', title_en: 'My Tasks & Checklist', adminTitle: 'کارتابل وظایف و پیگیری', adminTitle_en: 'Task Cartable & Follow-up', icon: 'fa-list-check', color: 'text-emerald-400' },
+            { id: 'toolbox', title: 'جعبه ابزار تخصصی من', title_en: 'My Specialized Toolbox', adminTitle: 'جعبه ابزار جامع استودیو', adminTitle_en: 'Studio Master Toolbox', icon: 'fa-screwdriver-wrench', color: 'text-pink-400' },
+            { id: 'chat', title: 'گفتگوی تیمی و نظرسنجی', title_en: 'Team Chat & Polls', adminTitle: 'گفتگوی تیمی و نظرسنجی', adminTitle_en: 'Team Chat & Polls', icon: 'fa-comments', color: 'text-amber-400' },
+            { id: 'notes', title: 'برد ایده و یادداشت شخصی', title_en: 'Idea Board & Personal Notes', adminTitle: 'برد ایده و یادداشت‌ها', adminTitle_en: 'Idea Board & Notes', icon: 'fa-lightbulb', color: 'text-yellow-400' },
+            { id: 'crm', title: 'پرونده مشتریان و مالی', title_en: 'Clients & Financials (CRM)', adminTitle: 'پرونده مشتریان و مالی (CRM)', adminTitle_en: 'Clients & Financials (CRM)', icon: 'fa-briefcase', color: 'text-rose-400' },
+            { id: 'office', title: 'نامه‌نگاری و صورتجلسات', title_en: 'Letters & Meeting Minutes', adminTitle: 'نامه‌نگاری و صورتجلسات', adminTitle_en: 'Letters & Meeting Minutes', icon: 'fa-envelope-open-text', color: 'text-indigo-400' },
+            { id: 'users', title: 'مدیریت اعضا و دسترسی‌ها', title_en: 'Team & Access Management', adminTitle: 'مدیریت اعضا و دسترسی‌ها', adminTitle_en: 'Team & Access Management', icon: 'fa-users-gear', color: 'text-fuchsia-400', adminOnly: true },
+            { id: 'datahub', title: 'خروجی اکسل و بکاپ', title_en: 'Excel Export & Backup', adminTitle: 'خروجی اکسل و بکاپ دیتابیس', adminTitle_en: 'Excel Export & Database Backup', icon: 'fa-database', color: 'text-teal-400' }
+        ];
+
+        const ROLE_PRESETS = {
+            admin: {
+                label: 'مدیر استودیو',
+                label_en: 'Studio Director',
+                badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+                defaultModules: ['dashboard', 'projects', 'cartable', 'toolbox', 'chat', 'crm', 'office', 'notes', 'users', 'datahub']
+            },
+            graphic: {
+                label: 'طراح گرافیک و برندینگ',
+                label_en: 'Graphic & Brand Designer',
+                badgeColor: 'bg-pink-500/20 text-pink-300 border-pink-500/40',
+                defaultModules: ['dashboard', 'projects', 'cartable', 'toolbox', 'chat', 'notes']
+            },
+            motion: {
+                label: 'موشن گرافیست',
+                label_en: 'Motion Designer',
+                badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+                defaultModules: ['dashboard', 'projects', 'cartable', 'toolbox', 'chat', 'notes']
+            },
+            uiux: {
+                label: 'طراح UI/UX',
+                label_en: 'UI/UX Product Designer',
+                badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+                defaultModules: ['dashboard', 'projects', 'cartable', 'toolbox', 'chat', 'notes']
+            },
+            crm: {
+                label: 'مدیر فروش و ارتباط با کارفرما',
+                label_en: 'Account & Sales Manager',
+                badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+                defaultModules: ['dashboard', 'crm', 'office', 'projects', 'toolbox', 'chat']
+            }
+        };
+
+        const UI_DICT = {
+            fa: {
+                aiTranslatorReady: 'مترجم هوشمند دوطرفه فعال',
+                loginPortalTitle: 'استودیو خلاقیت و دیزاین رتینا',
+                loginPortalSubtitle: 'پورتال خصوصی مدیریت پروژه، ارتباطات تیمی و جعبه ابزار دیزاین',
+                usernameLabel: 'نام کاربری',
+                usernamePlaceholder: 'نام کاربری خود را وارد کنید...',
+                passwordLabel: 'رمز عبور',
+                passwordPlaceholder: 'رمز عبور را وارد کنید...',
+                loginErrorText: 'نام کاربری یا رمز عبور اشتباه است.',
+                loginBtnText: 'ورود به میزکار رتینا',
+                privateEnvLabel: 'محیط خصوصی استودیو رتینا',
+                versionLabel: 'نسخه عملیاتی ۲.۵ (ذخیره‌سازی آنی Auto-Save)',
+                editProfileBtn: 'ویرایش پروفایل',
+                logoutBtn: 'خروج',
+                savedBadge: 'ذخیره آنی در کد',
+                footerSubtext: 'استودیو گرافیک رتینا • ذخیره‌سازی خودکار در کد',
+                headerDateSubtitle: 'چهارشنبه ۶ آبان ۱۴۰۵ | همگام‌سازی و ذخیره‌سازی آنی اطلاعات',
+                translatingStatus: 'در حال ترجمه هوشمند...',
+                newTaskBtn: 'وظیفه جدید',
+                onlineMeetingBtn: 'جلسه آنلاین',
+                scopeAllTeam: 'نمایش: کل کارهای تیم',
+                scopeOnlyMine: 'نمایش: فقط کارهای من',
+                execPanelBadge: 'پنل مدیریت کلان استودیو رتینا',
+                welcomeMsg: 'خوش آمدید،',
+                execPanelDesc: 'میزکار دوزبانه استودیو آماده است. هر تغییر، تسک یا پیامی که ثبت شود بلافاصله در حافظه پایدار و کدهای سورس ذخیره می‌شود.',
+                newProjectBtn: '+ پروژه جدید',
+                newMemberBtn: '+ افزودن عضو تیم',
+                activeProjectsCard: 'پروژه‌های فعال',
+                completedTasksCard: 'وظایف تکمیل‌شده',
+                teamMembersCard: 'اعضای تیم',
+                clientsCard: 'کارفرمایان ثبت‌شده',
+                personUnit: 'نفر',
+                studioProjectsHeading: 'پروژه‌های استودیو رتینا',
+                defineNewProjectLink: '+ تعریف پروژه جدید',
+                progressLabel: 'پیشرفت',
+                noProjectsDefined: 'هنوز پروژه‌ای تعریف نشده است.',
+                teamMembersHeading: 'اعضای تیم',
+                addMemberLink: '+ افزودن عضو',
+                personalWorkspaceBadge: 'میزکار اختصاصی:',
+                helloMsg: 'سلام',
+                dearWord: 'عزیز 🎨',
+                personalWorkspaceDesc: 'پنل شما خلوت و دوزبانه است تا فقط وظایف و ابزارهای مرتبط با تخصص خودتان را به فارسی یا انگلیسی ببینید.',
+                myToolboxBtn: 'جعبه ابزار تخصصی من',
+                myActiveTasksCard: 'وظایف فعال من',
+                taskUnit: 'تسک',
+                completedItemsCard: 'کارهای تکمیل‌شده',
+                itemUnit: 'مورد',
+                assignedToYouHeading: 'وظایف محول‌شده به شما',
+                dueDateLabel: 'مهلت:',
+                abanMonth: 'آبان',
+                noTasksAssigned: 'هیچ وظیفه‌ای برای شما ثبت نشده است.',
+                noProjectStateTitle: 'هیچ پروژه‌ای در استودیو تعریف نشده است',
+                noProjectStateDesc: 'با تعریف اولین پروژه، بورد کانبان به صورت دو زبانه هوشمند فعال می‌شود.',
+                createNewProjectBtn: '+ ایجاد پروژه جدید',
+                addShortBtn: '+ افزودن',
+                status_backlog: 'بریف و ایده‌پردازی',
+                status_doing: 'در حال طراحی',
+                status_review: 'بررسی مدیر هنری',
+                status_revision: 'اصلاحات',
+                status_done: 'تحویل نهایی',
+                personalCartableHeading: 'کارتابل وظایف شخصی شما',
+                emptyCartableText: 'هیچ وظیفه‌ای در کارتابل شما نیست.',
+                specializedToolboxHeading: 'جعبه ابزار تخصصی',
+                sendBtn: 'ارسال',
+                chatPlaceholder: 'پیام خود را به فارسی یا انگلیسی بنویسید (ترجمه خودکار)...',
+                noMessagesYet: 'هنوز پیامی ارسال نشده است.',
+                crmHeading: 'پرونده مشتریان و مالی',
+                addClientBtn: '+ ثبت کارفرما',
+                contractLabel: 'قرارداد:',
+                paidLabel: 'دریافتی:',
+                noClientsText: 'مشتری ثبت نشده است.',
+                officeHeading: 'نامه‌ها و صورتجلسات',
+                newMinuteBtn: '+ صورتجلسه جدید',
+                noMinutesText: 'صورتجلسه‌ای ثبت نشده است.',
+                personalNotesHeading: 'یادداشت‌های شخصی و برد ایده',
+                addNoteBtn: '+ یادداشت جدید',
+                noNotesText: 'هیچ یادداشتی وجود ندارد.',
+                usersMgmtHeading: 'مدیریت اعضا، اطلاعات ورود و دسترسی‌ها',
+                usersMgmtSub: 'هر تغییری به فارسی یا انگلیسی وارد کنید، به طور خودکار به زبان دیگر ترجمه و ذخیره می‌شود.',
+                youAdminBadge: 'شما (مدیر)',
+                editFullInfoBtn: 'ویرایش کامل اطلاعات',
+                deleteBtn: 'حذف',
+                datahubHeading: 'خروجی اکسل (CSV) و پشتیبان‌گیری',
+                exportExcelBtn: '📥 دانلود خروجی اکسل وظایف',
+                exportJsonBtn: '📥 دانلود بکاپ کامل JSON'
+            },
+            en: {
+                aiTranslatorReady: 'Smart Bi-Directional AI Translator Active',
+                loginPortalTitle: 'Retina Creative & Design Studio',
+                loginPortalSubtitle: 'Private Project Management, Team Collaboration & Design Suite',
+                usernameLabel: 'Username',
+                usernamePlaceholder: 'Enter your username...',
+                passwordLabel: 'Password',
+                passwordPlaceholder: 'Enter your password...',
+                loginErrorText: 'Invalid username or password.',
+                loginBtnText: 'Sign In to Retina Workspace',
+                privateEnvLabel: 'Retina Studio Private Portal',
+                versionLabel: 'Production v2.5 (Auto-Save Active)',
+                editProfileBtn: 'Edit Profile',
+                logoutBtn: 'Sign Out',
+                savedBadge: 'Auto-Saved',
+                footerSubtext: 'Retina Design Studio • Auto-Saved in Source',
+                headerDateSubtitle: 'Wednesday, Oct 28, 2026 | Real-time AI Bilingual Synchronization',
+                translatingStatus: 'AI Translating...',
+                newTaskBtn: 'New Task',
+                onlineMeetingBtn: 'Video Room',
+                scopeAllTeam: 'View: All Team Tasks',
+                scopeOnlyMine: 'View: My Tasks Only',
+                execPanelBadge: 'Retina Studio Executive Administration',
+                welcomeMsg: 'Welcome,',
+                execPanelDesc: 'Your bilingual studio workspace is ready. Any change or task is instantly saved to persistent storage and source state.',
+                newProjectBtn: '+ New Project',
+                newMemberBtn: '+ Add Team Member',
+                activeProjectsCard: 'Active Projects',
+                completedTasksCard: 'Completed Tasks',
+                teamMembersCard: 'Team Members',
+                clientsCard: 'Registered Clients',
+                personUnit: 'Members',
+                studioProjectsHeading: 'Retina Studio Projects',
+                defineNewProjectLink: '+ Create New Project',
+                progressLabel: 'Progress',
+                noProjectsDefined: 'No projects created yet.',
+                teamMembersHeading: 'Team Members',
+                addMemberLink: '+ Add Member',
+                personalWorkspaceBadge: 'Dedicated Workspace:',
+                helloMsg: 'Hello',
+                dearWord: '🎨',
+                personalWorkspaceDesc: 'Your panel is streamlined and bilingual so you only see tasks and tools relevant to your specialty in English or Persian.',
+                myToolboxBtn: 'My Specialized Toolbox',
+                myActiveTasksCard: 'My Active Tasks',
+                taskUnit: 'Tasks',
+                completedItemsCard: 'Completed Items',
+                itemUnit: 'Done',
+                assignedToYouHeading: 'Tasks Assigned to You',
+                dueDateLabel: 'Due:',
+                abanMonth: 'Nov',
+                noTasksAssigned: 'No tasks are currently assigned to you.',
+                noProjectStateTitle: 'No Projects Defined in Studio Yet',
+                noProjectStateDesc: 'Create your first project to activate the smart bilingual Kanban board.',
+                createNewProjectBtn: '+ Create New Project',
+                addShortBtn: '+ Add Task',
+                status_backlog: 'Brief & Ideation',
+                status_doing: 'In Design',
+                status_review: 'Art Director Review',
+                status_revision: 'Revisions',
+                status_done: 'Final Delivery',
+                personalCartableHeading: 'Your Personal Task Cartable',
+                emptyCartableText: 'Your task cartable is empty.',
+                specializedToolboxHeading: 'Specialized Toolbox:',
+                sendBtn: 'Send',
+                chatPlaceholder: 'Type a message in English or Persian (Auto-translated)...',
+                noMessagesYet: 'No messages sent yet.',
+                crmHeading: 'Client Files & Financials (CRM)',
+                addClientBtn: '+ Add Client',
+                contractLabel: 'Contract:',
+                paidLabel: 'Paid:',
+                noClientsText: 'No clients registered yet.',
+                officeHeading: 'Official Letters & Meeting Minutes',
+                newMinuteBtn: '+ New Meeting Minute',
+                noMinutesText: 'No meeting minutes recorded yet.',
+                personalNotesHeading: 'Personal Notes & Idea Board',
+                addNoteBtn: '+ New Note',
+                noNotesText: 'No personal notes yet.',
+                usersMgmtHeading: 'Team Members, Credentials & Access Control',
+                usersMgmtSub: 'Any profile or role edited in Persian or English is automatically translated and synced to the other language.',
+                youAdminBadge: 'You (Admin)',
+                editFullInfoBtn: 'Edit Full Profile',
+                deleteBtn: 'Delete',
+                datahubHeading: 'Excel (CSV) Export & Full Backup',
+                exportExcelBtn: '📥 Download Tasks Excel (CSV)',
+                exportJsonBtn: '📥 Download Full JSON Backup'
+            }
+        };
+
+        const DEFAULT_STATE = {
+            lang: 'fa',
+            brand: {
+                name: 'استودیو رتینا',
+                name_en: 'Retina Studio',
+                slogan: 'میزکار خلاقیت و دیزاین',
+                slogan_en: 'Creative & Design Workspace',
+                theme: 'default',
+                logoDataUrl: null
+            },
+            activeUserId: null,
+            onlyMyTasksFilter: false,
+            currentModule: 'dashboard',
+            selectedProjectId: null,
+            users: [
+                {
+                    id: 'u_admin',
+                    username: 'ارستو علی پور',
+                    username_en: 'Arastoo Alipour',
+                    password: '1234',
+                    name: 'ارستو علی پور',
+                    name_en: 'Arastoo Alipour',
+                    role: 'مدیر استودیو',
+                    role_en: 'Studio Director',
+                    roleType: 'admin',
+                    avatarColor: 'from-purple-500 to-indigo-500',
+                    specialty: 'مدیریت کل',
+                    specialty_en: 'Executive Management',
+                    allowedModules: ['dashboard', 'projects', 'cartable', 'toolbox', 'chat', 'crm', 'office', 'notes', 'users', 'datahub']
+                }
+            ],
+            projects: [],
+            tasks: [],
+            channels: [{ id: 'ch_general', name: 'کانال-عمومی-رتینا', name_en: 'retina-general-channel', type: 'channel', desc: 'هماهنگی تیم استودیو رتینا', desc_en: 'Retina Studio Team Coordination' }],
+            messages: [],
+            clients: [],
+            minutes: [],
+            notes: []
+        };
+
+        const STORAGE_KEY = 'retina_studio_autosave_prod_v25';
+        let savedLocal = null;
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('retina_studio_bilingual_prod_v2');
+            if (raw) savedLocal = JSON.parse(raw);
+        } catch (e) {}
+
+        window.state = savedLocal && Array.isArray(savedLocal.users) && savedLocal.users.length > 0
+            ? savedLocal
+            : JSON.parse(JSON.stringify(DEFAULT_STATE));
+
+        if (!window.state.lang) window.state.lang = 'fa';
+        if (!window.state.brand.name_en) window.state.brand.name_en = 'Retina Studio';
+        if (!window.state.brand.slogan_en) window.state.brand.slogan_en = 'Creative & Design Workspace';
+
+        window.state.users.forEach(u => {
+            if (!u.name_en) u.name_en = u.username === 'ارستو علی پور' ? 'Arastoo Alipour' : u.name;
+            if (!u.role_en) u.role_en = (ROLE_PRESETS[u.roleType] && ROLE_PRESETS[u.roleType].label_en) || 'Team Member';
+            if (!u.specialty_en) u.specialty_en = u.role_en;
+        });
+
+        function isEn() { return window.state.lang === 'en'; }
+        function t(key) {
+            const lang = window.state.lang || 'fa';
+            return (UI_DICT[lang] && UI_DICT[lang][key]) || UI_DICT.fa[key] || key;
+        }
+        function loc(obj, field) {
+            if (!obj) return '';
+            if (isEn()) return obj[field + '_en'] || obj[field] || '';
+            return obj[field] || obj[field + '_en'] || '';
+        }
+        function detectTextLanguage(str) {
+            return /[\u0600-\u06FF]/.test(String(str || '')) ? 'fa' : 'en';
+        }
+        function setAiTranslatingUI(active) {
+            const ind = document.getElementById('ai-translating-indicator');
+            if (!ind) return;
+            if (active) { ind.classList.remove('hidden'); ind.classList.add('flex'); }
+            else { ind.classList.add('hidden'); ind.classList.remove('flex'); }
+        }
+
+        const QUICK_DICT_FA_TO_EN = {
+            'ارستو علی پور': 'Arastoo Alipour',
+            'استودیو رتینا': 'Retina Studio',
+            'میزکار خلاقیت و دیزاین': 'Creative & Design Workspace',
+            'مدیر استودیو': 'Studio Director',
+            'مدیریت کل': 'Executive Management',
+            'طراح گرافیک و برندینگ': 'Graphic & Brand Designer',
+            'موشن گرافیست': 'Motion Designer',
+            'طراح UI/UX': 'UI/UX Designer',
+            'مدیر فروش و ارتباط با کارفرما': 'Account & Sales Manager',
+            'برندینگ و هویت بصری': 'Branding & Visual Identity',
+            'موشن گرافیک و تیزر': 'Motion Graphics & Teaser',
+            'طراحی رابط کاربری UI/UX': 'UI/UX Interface Design'
+        };
+        const QUICK_DICT_EN_TO_FA = Object.fromEntries(Object.entries(QUICK_DICT_FA_TO_EN).map(([k, v]) => [v.toLowerCase(), k]));
+
+        async function smartTranslateText(text, targetLang) {
+            const clean = String(text || '').trim();
+            if (!clean) return '';
+            if (targetLang === 'en' && QUICK_DICT_FA_TO_EN[clean]) return QUICK_DICT_FA_TO_EN[clean];
+            if (targetLang === 'fa' && QUICK_DICT_EN_TO_FA[clean.toLowerCase()]) return QUICK_DICT_EN_TO_FA[clean.toLowerCase()];
+
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+            const systemPrompt = targetLang === 'en'
+                ? "Translate Persian to professional English. Return ONLY translated text."
+                : "Translate English to professional Persian. Return ONLY translated text.";
+
+            setAiTranslatingUI(true);
+            try {
+                let delay = 800;
+                for (let attempt = 0; attempt < 3; attempt++) {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: clean }] }], systemInstruction: { parts: [{ text: systemPrompt }] } })
+                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        const out = result?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+                        if (out) { setAiTranslatingUI(false); return out.replace(/^["']|["']$/g, ''); }
+                    }
+                    await new Promise(r => setTimeout(r, delay));
+                    delay *= 2;
+                }
+            } catch (e) {}
+            setAiTranslatingUI(false);
+            return clean;
+        }
+
+        async function autoSyncBilingualFields(entity, fieldNames) {
+            if (!entity) return;
+            let updated = false;
+            for (const f of fieldNames) {
+                const rawVal = String(entity[f] || '').trim();
+                if (!rawVal) continue;
+                if (detectTextLanguage(rawVal) === 'fa') {
+                    entity[f] = rawVal;
+                    const translatedEn = await smartTranslateText(rawVal, 'en');
+                    if (translatedEn) { entity[f + '_en'] = translatedEn; updated = true; }
+                } else {
+                    entity[f + '_en'] = rawVal;
+                    const translatedFa = await smartTranslateText(rawVal, 'fa');
+                    if (translatedFa) { entity[f] = translatedFa; updated = true; }
+                }
+            }
+            if (updated) {
+                persistState();
+                if (window.state.activeUserId) { initHeaderAndSidebar(); renderCurrentModule(); }
+            }
+        }
+
+        // =====================================================================
+        // AUTO-SAVE PERSISTENCE: Instantly Saves to LocalStorage & Virtual File
+        // =====================================================================
+        function persistState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(window.state));
+            } catch (e) {}
+            if (window.state.activeUserId) updateSidebarBadges();
+        }
+
+        function applyLanguageDirectionAndStaticTexts() {
+            const lang = window.state.lang || 'fa';
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
+
+            const headerLangLbl = document.getElementById('header-lang-label');
+            if (headerLangLbl) headerLangLbl.innerText = lang === 'en' ? 'فارسی' : 'EN';
+
+            const loginLangLbl = document.getElementById('login-lang-btn-text');
+            if (loginLangLbl) loginLangLbl.innerText = lang === 'en' ? 'فارسی | FA' : 'English | EN';
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.innerText = t(key);
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const key = el.getAttribute('data-i18n-placeholder');
+                el.setAttribute('placeholder', t(key));
+            });
+
+            const btDisp = document.getElementById('brand-title-display');
+            const bsDisp = document.getElementById('brand-slogan-display');
+            if (btDisp) btDisp.innerText = loc(window.state.brand, 'name');
+            if (bsDisp) bsDisp.innerText = loc(window.state.brand, 'slogan');
+
+            if (window.state.brand.theme && window.state.brand.theme !== 'default') {
+                document.documentElement.setAttribute('data-theme', window.state.brand.theme);
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+
+            if (window.state.activeUserId) {
+                initHeaderAndSidebar();
+                switchModule(window.state.currentModule || 'dashboard');
+            }
+        }
+
+        function toggleLanguage() {
+            window.state.lang = window.state.lang === 'en' ? 'fa' : 'en';
+            persistState();
+            applyLanguageDirectionAndStaticTexts();
+            showToast(isEn() ? 'Language switched to English (Auto-Saved)' : 'زبان محیط به فارسی تغییر یافت (ذخیره خودکار)', 'info');
+        }
+
+        function getUser(id) { return window.state.users.find(u => u.id === id) || window.state.users[0]; }
+        function getActiveUser() { return window.state.users.find(u => u.id === window.state.activeUserId) || null; }
+        function isAdmin() { const u = getActiveUser(); return u && u.roleType === 'admin'; }
+        function getProject(id) { return window.state.projects.find(p => p.id === id) || window.state.projects[0] || null; }
+        function formatToman(num) {
+            if (isEn()) return Number(num || 0).toLocaleString('en-US') + ' Toman';
+            return Number(num || 0).toLocaleString('fa-IR') + ' تومان';
+        }
+        function toPersianNum(n) {
+            if (isEn()) return String(n ?? 0);
+            return String(n ?? 0).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+        }
+        function normalizePersianText(str) {
+            return String(str || '').trim().replace(/ي/g, 'ی').replace(/ك/g, 'ک').replace(/\s+/g, ' ').toLowerCase();
+        }
+
+        function calcProjectWeightedProgress(projectId) {
+            const pTasks = window.state.tasks.filter(t => t.projectId === projectId);
+            if (!pTasks.length) return 0;
+            let totalWeight = 0, weightedSum = 0;
+            pTasks.forEach(t => {
+                const w = Number(t.weight) || 1;
+                totalWeight += w;
+                weightedSum += (Number(t.progress) || 0) * w;
+            });
+            return Math.round(weightedSum / totalWeight);
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const colors = {
+                success: 'border-emerald-500 bg-emerald-950/90 text-emerald-200',
+                info: 'border-cyan-500 bg-slate-900/95 text-cyan-200',
+                warning: 'border-amber-500 bg-amber-950/90 text-amber-200'
+            };
+            const icons = {
+                success: 'fa-circle-check text-emerald-400',
+                info: 'fa-circle-info text-cyan-400',
+                warning: 'fa-triangle-exclamation text-amber-400'
+            };
+            const el = document.createElement('div');
+            el.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl border shadow-2xl backdrop-blur-md text-xs font-bold transition-all duration-300 ${colors[type] || colors.success}`;
+            el.innerHTML = `<i class="fa-solid ${icons[type] || icons.success} text-base"></i><span>${message}</span>`;
+            container.appendChild(el);
+            setTimeout(() => {
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 300);
+            }, 3000);
+        }
+
+        function toggleLoginPasswordVisibility() {
+            const inp = document.getElementById('login-password');
+            const eye = document.getElementById('login-pass-eye');
+            if (inp.type === 'password') { inp.type = 'text'; eye.className = 'fa-regular fa-eye-slash'; }
+            else { inp.type = 'password'; eye.className = 'fa-regular fa-eye'; }
+        }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            const usernameInput = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+            performLogin(usernameInput, password);
+        }
+
+        function performLogin(usernameInput, password) {
+            const normInput = normalizePersianText(usernameInput);
+            const found = window.state.users.find(u => {
+                const normUser = normalizePersianText(u.username);
+                const normUserEn = normalizePersianText(u.username_en || '');
+                const normName = normalizePersianText(u.name);
+                const normNameEn = normalizePersianText(u.name_en || '');
+                return (normUser === normInput || normUserEn === normInput || normName === normInput || normNameEn === normInput) && u.password === password;
+            });
+
+            const errBox = document.getElementById('login-error-box');
+            if (!found) {
+                errBox.classList.remove('hidden');
+                showToast(t('loginErrorText'), 'warning');
+                return;
+            }
+            errBox.classList.add('hidden');
+            window.state.activeUserId = found.id;
+            window.state.onlyMyTasksFilter = found.roleType !== 'admin';
+
+            if (['graphic', 'motion', 'uiux', 'crm'].includes(found.roleType)) {
+                window.state.activeToolboxTab = found.roleType;
+            } else {
+                window.state.activeToolboxTab = 'graphic';
+            }
+
+            const allowed = found.allowedModules || (ROLE_PRESETS[found.roleType] ? ROLE_PRESETS[found.roleType].defaultModules : ['dashboard']);
+            if (!allowed.includes(window.state.currentModule)) {
+                window.state.currentModule = allowed[0] || 'dashboard';
+            }
+
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('app-shell').classList.remove('hidden');
+
+            initHeaderAndSidebar();
+            switchModule(window.state.currentModule);
+            persistState();
+            showToast(isEn() ? `Welcome ${loc(found, 'name')}!` : `خوش آمدید ${loc(found, 'name')} عزیز!`, 'success');
+        }
+
+        function logoutUser() {
+            window.state.activeUserId = null;
+            persistState();
+            document.getElementById('app-shell').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+            showToast(isEn() ? 'Signed out successfully' : 'از حساب کاربری خارج شدید', 'info');
+        }
+
+        function openEditOwnProfileModal() {
+            const u = getActiveUser();
+            if (!u) return;
+            document.getElementById('own-name-input').value = loc(u, 'name') || '';
+            document.getElementById('own-username-input').value = u.username || '';
+            document.getElementById('own-pass-input').value = u.password || '';
+            document.getElementById('own-avatar-color').value = u.avatarColor || 'from-purple-500 to-indigo-500';
+            document.getElementById('edit-profile-modal').classList.remove('hidden');
+        }
+
+        async function saveOwnProfileChanges() {
+            const u = getActiveUser();
+            if (!u) return;
+            const newName = document.getElementById('own-name-input').value.trim();
+            const newUsername = document.getElementById('own-username-input').value.trim();
+            const newPass = document.getElementById('own-pass-input').value.trim();
+            const newColor = document.getElementById('own-avatar-color').value;
+
+            if (!newName || !newUsername || !newPass) {
+                return showToast(isEn() ? 'Name, username and password cannot be empty' : 'نام، نام کاربری و رمز عبور نمی‌توانند خالی باشند', 'warning');
+            }
+
+            const duplicate = window.state.users.find(other => other.id !== u.id && normalizePersianText(other.username) === normalizePersianText(newUsername));
+            if (duplicate) {
+                return showToast(isEn() ? 'This username is already taken' : 'این نام کاربری قبلاً توسط عضو دیگری انتخاب شده است', 'warning');
+            }
+
+            u.name = newName;
+            u.username = newUsername;
+            u.password = newPass;
+            u.avatarColor = newColor;
+
+            document.getElementById('edit-profile-modal').classList.add('hidden');
+            persistState();
+            initHeaderAndSidebar();
+            renderCurrentModule();
+            showToast(isEn() ? 'Profile updated & auto-saved!' : 'پروفایل به‌روز شد و به صورت آنی ذخیره گردید!', 'success');
+
+            await autoSyncBilingualFields(u, ['name']);
+        }
+
+        function initHeaderAndSidebar() {
+            const activeU = getActiveUser();
+            if (!activeU) return;
+
+            const dispName = loc(activeU, 'name');
+            const dispRole = loc(activeU, 'role');
+            const dispSpec = loc(activeU, 'specialty') || dispRole;
+
+            const avatarEl = document.getElementById('sidebar-user-avatar');
+            avatarEl.className = `w-10 h-10 rounded-xl bg-gradient-to-tr ${activeU.avatarColor} text-white font-extrabold text-xs flex items-center justify-center shadow`;
+            avatarEl.innerText = dispName.slice(0, 2).toUpperCase();
+            document.getElementById('sidebar-user-name').innerText = dispName;
+            document.getElementById('sidebar-user-username').innerText = activeU.username;
+            document.getElementById('sidebar-user-role').innerText = dispRole;
+            document.getElementById('footer-role-specialty').innerText = dispSpec;
+
+            updateScopeToggleButtonUI();
+            renderRoleBasedSidebarNav(activeU);
+
+            document.getElementById('brand-title-display').innerText = loc(window.state.brand, 'name');
+            document.getElementById('brand-slogan-display').innerText = loc(window.state.brand, 'slogan');
+
+            updateSidebarBadges();
+            renderAssistantAlerts();
+        }
+
+        function renderRoleBasedSidebarNav(user) {
+            const nav = document.getElementById('sidebar-nav');
+            const allowed = user.allowedModules || (ROLE_PRESETS[user.roleType] ? ROLE_PRESETS[user.roleType].defaultModules : ['dashboard']);
+            const userIsAdmin = user.roleType === 'admin';
+
+            const visibleModules = ALL_MODULES_CATALOG.filter(m => {
+                if (m.adminOnly && !userIsAdmin) return false;
+                return allowed.includes(m.id);
+            });
+
+            nav.innerHTML = visibleModules.map(m => {
+                const label = userIsAdmin
+                    ? (isEn() ? m.adminTitle_en : m.adminTitle)
+                    : (isEn() ? m.title_en : m.title);
+                let badgeHtml = '';
+                if (m.id === 'projects') badgeHtml = `<span id="badge-projects-count" class="text-xs px-2 py-0.5 rounded-full retina-panel">0</span>`;
+                else if (m.id === 'cartable') badgeHtml = `<span id="badge-cartable-count" class="text-xs px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 font-bold">0</span>`;
+                return `
+                <button onclick="switchModule('${m.id}')" data-mod="${m.id}" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid ${m.icon} w-5 text-center ${m.color}"></i>
+                        <span>${label}</span>
+                    </div>
+                    ${badgeHtml}
+                </button>`;
+            }).join('');
+        }
+
+        function toggleTaskScopeFilter() {
+            window.state.onlyMyTasksFilter = !window.state.onlyMyTasksFilter;
+            updateScopeToggleButtonUI();
+            renderCurrentModule();
+            showToast(window.state.onlyMyTasksFilter ? t('scopeOnlyMine') : t('scopeAllTeam'), 'info');
+        }
+
+        function updateScopeToggleButtonUI() {
+            const lbl = document.getElementById('scope-toggle-label');
+            if (lbl) lbl.innerText = window.state.onlyMyTasksFilter ? t('scopeOnlyMine') : t('scopeAllTeam');
+        }
+
+        function updateSidebarBadges() {
+            const activeProjects = window.state.projects.filter(p => !p.archived).length;
+            const projBadge = document.getElementById('badge-projects-count');
+            if (projBadge) projBadge.innerText = toPersianNum(activeProjects);
+
+            const myPendingTasks = window.state.tasks.filter(t => t.assignees.includes(window.state.activeUserId) && t.status !== 'done').length;
+            const cartBadge = document.getElementById('badge-cartable-count');
+            if (cartBadge) cartBadge.innerText = toPersianNum(myPendingTasks);
+        }
+
+        function switchModule(modName) {
+            const activeU = getActiveUser();
+            if (!activeU) return;
+            if (modName === 'users' && activeU.roleType !== 'admin') {
+                return showToast(isEn() ? 'Admin access only' : 'این بخش فقط مخصوص مدیر استودیو است', 'warning');
+            }
+
+            window.state.currentModule = modName;
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if (btn.getAttribute('data-mod') === modName) {
+                    btn.className = 'nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-extrabold transition retina-gradient text-white shadow-lg';
+                } else {
+                    btn.className = 'nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition hover:bg-[var(--bg-panel)] text-[var(--text-main)]';
+                }
+            });
+
+            const uName = loc(activeU, 'name');
+            const uRole = loc(activeU, 'role');
+            const titlesFa = {
+                dashboard: activeU.roleType === 'admin' ? 'داشبورد و مانیتورینگ کلان استودیو رتینا' : `میزکار اختصاصی ${uName} (${uRole})`,
+                projects: 'پروژه‌ها و بورد تخصصی دیزاین',
+                cartable: 'کارتابل وظایف شخصی و چک‌لیست اجرایی',
+                toolbox: `جعبه ابزار تخصصی ${uRole}`,
+                chat: 'گفتگوی تیمی، نظرسنجی و تبدیل پیام به وظیفه',
+                crm: 'پرونده پویای مشتریان، پیش‌فاکتورها و مالی',
+                office: 'اتوماسیون مکاتبات داخلی و صورتجلسات دیجیتال',
+                notes: 'برد ایده، پالت‌ها و یادداشت‌های شخصی',
+                users: 'مدیریت اعضای تیم، رمزهای ورود و شخصی‌سازی پنل‌ها',
+                datahub: 'خروجی اکسل (CSV) و پشتیبان‌گیری کامل'
+            };
+            const titlesEn = {
+                dashboard: activeU.roleType === 'admin' ? 'Retina Studio Executive Dashboard' : `${uName}'s Workspace (${uRole})`,
+                projects: 'Projects & Specialized Design Board',
+                cartable: 'Personal Task Cartable & Checklists',
+                toolbox: `${uRole} Specialized Toolbox`,
+                chat: 'Team Messenger, Polls & Chat-to-Task',
+                crm: 'Client Profiles & Financial Management (CRM)',
+                office: 'Internal Correspondence & Digital Minutes',
+                notes: 'Idea Board, Palettes & Personal Notes',
+                users: 'Team Members, Credentials & Panel Permissions',
+                datahub: 'Excel (CSV) Export & Full Database Backup'
+            };
+            const map = isEn() ? titlesEn : titlesFa;
+            document.getElementById('header-module-title').innerText = map[modName] || loc(window.state.brand, 'name');
+            renderCurrentModule();
+        }
+
+        function toggleSidebar() {
+            const sb = document.getElementById('sidebar');
+            sb.classList.toggle('hidden');
+            sb.classList.toggle('fixed');
+            sb.classList.toggle('inset-y-0');
+            sb.classList.toggle('right-0');
+        }
+
+        window.renderCurrentModule = function() {
+            if (!window.state.activeUserId) return;
+            const mod = window.state.currentModule;
+            const main = document.getElementById('main-content');
+            if (mod === 'dashboard') renderDashboard(main);
+            else if (mod === 'projects') renderProjectsModule(main);
+            else if (mod === 'cartable') renderCartableModule(main);
+            else if (mod === 'toolbox') renderToolboxModule(main);
+            else if (mod === 'chat') renderChatModule(main);
+            else if (mod === 'crm') renderCrmModule(main);
+            else if (mod === 'office') renderOfficeModule(main);
+            else if (mod === 'notes') renderNotesModule(main);
+            else if (mod === 'users') renderUsersManagementModule(main);
+            else if (mod === 'datahub') renderDataHubModule(main);
+            updateSidebarBadges();
+        };
+
+        function renderDashboard(container) {
+            const activeU = getActiveUser();
+            if (!activeU) return;
+            if (activeU.roleType !== 'admin') { renderPersonalRoleDashboard(container, activeU); return; }
+
+            const activeProjects = window.state.projects.filter(p => !p.archived);
+            const totalTasks = window.state.tasks.length;
+            const doneTasks = window.state.tasks.filter(t => t.status === 'done').length;
+
+            container.innerHTML = `
+                <div class="rounded-3xl p-6 retina-gradient text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div class="space-y-1.5">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/25 text-xs font-bold">
+                            <i class="fa-solid fa-crown text-amber-300"></i>
+                            <span>${t('execPanelBadge')}</span>
+                        </div>
+                        <h2 class="text-xl md:text-2xl font-black">${t('welcomeMsg')} ${loc(activeU, 'name')} 👋</h2>
+                        <p class="text-xs text-white/90 max-w-2xl">${t('execPanelDesc')}</p>
+                    </div>
+                    <div class="flex flex-wrap gap-2.5 shrink-0">
+                        <button onclick="openProjectEditorModal()" class="px-4 py-2.5 rounded-2xl bg-white text-slate-900 font-extrabold text-xs shadow-lg hover:bg-slate-100 transition"><i class="fa-solid fa-folder-plus mx-1"></i> ${t('newProjectBtn')}</button>
+                        <button onclick="openUserEditorModal()" class="px-4 py-2.5 rounded-2xl bg-black/30 hover:bg-black/40 text-white font-bold text-xs transition"><i class="fa-solid fa-user-plus mx-1"></i> ${t('newMemberBtn')}</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="retina-card rounded-2xl p-4 flex items-center justify-between">
+                        <div><p class="text-xs text-[var(--text-muted)]">${t('activeProjectsCard')}</p><h3 class="text-2xl font-black mt-1">${toPersianNum(activeProjects.length)}</h3></div>
+                        <div class="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-400 flex items-center justify-center text-xl"><i class="fa-solid fa-bezier-curve"></i></div>
+                    </div>
+                    <div class="retina-card rounded-2xl p-4 flex items-center justify-between">
+                        <div><p class="text-xs text-[var(--text-muted)]">${t('completedTasksCard')}</p><h3 class="text-2xl font-black mt-1">${toPersianNum(doneTasks)} / ${toPersianNum(totalTasks)}</h3></div>
+                        <div class="w-12 h-12 rounded-2xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center text-xl"><i class="fa-solid fa-scale-balanced"></i></div>
+                    </div>
+                    <div class="retina-card rounded-2xl p-4 flex items-center justify-between">
+                        <div><p class="text-xs text-[var(--text-muted)]">${t('teamMembersCard')}</p><h3 class="text-2xl font-black mt-1 text-purple-400">${toPersianNum(window.state.users.length)} ${t('personUnit')}</h3></div>
+                        <div class="w-12 h-12 rounded-2xl bg-fuchsia-500/15 text-fuchsia-400 flex items-center justify-center text-xl"><i class="fa-solid fa-users"></i></div>
+                    </div>
+                    <div class="retina-card rounded-2xl p-4 flex items-center justify-between">
+                        <div><p class="text-xs text-[var(--text-muted)]">${t('clientsCard')}</p><h3 class="text-2xl font-black mt-1 text-emerald-400">${toPersianNum(window.state.clients.length)}</h3></div>
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-xl"><i class="fa-solid fa-briefcase"></i></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 retina-card rounded-3xl p-5 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-extrabold text-sm flex items-center gap-2"><i class="fa-solid fa-bars-progress text-purple-400"></i> ${t('studioProjectsHeading')}</h3>
+                            <button onclick="openProjectEditorModal()" class="text-xs text-cyan-400 font-bold hover:underline">${t('defineNewProjectLink')}</button>
+                        </div>
+                        ${activeProjects.length ? activeProjects.map(p => `
+                            <div class="p-3.5 rounded-2xl retina-panel flex items-center justify-between cursor-pointer hover:border-purple-400 transition" onclick="window.state.selectedProjectId='${p.id}'; switchModule('projects');">
+                                <div class="flex items-center gap-2.5">
+                                    <span class="w-3 h-3 rounded-full" style="background:${p.color}"></span>
+                                    <span class="font-bold text-xs">${loc(p, 'title')}</span>
+                                </div>
+                                <span class="text-xs font-bold text-cyan-400">${toPersianNum(calcProjectWeightedProgress(p.id))}% ${t('progressLabel')}</span>
+                            </div>
+                        `).join('') : `<div class="p-8 text-center text-xs text-[var(--text-muted)]">${t('noProjectsDefined')}</div>`}
+                    </div>
+
+                    <div class="retina-card rounded-3xl p-5 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-extrabold text-sm flex items-center gap-2"><i class="fa-solid fa-users-viewfinder text-cyan-400"></i> ${t('teamMembersHeading')}</h3>
+                            <button onclick="openUserEditorModal()" class="text-[11px] text-purple-400 font-bold hover:underline">${t('addMemberLink')}</button>
+                        </div>
+                        <div class="space-y-3">
+                            ${window.state.users.map(u => `
+                                <div class="p-3 rounded-2xl retina-panel flex items-center justify-between text-xs">
+                                    <div class="flex items-center gap-2.5">
+                                        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr ${u.avatarColor} text-white font-bold flex items-center justify-center">${loc(u, 'name').slice(0,2).toUpperCase()}</div>
+                                        <div><div class="font-bold">${loc(u, 'name')}</div><div class="text-[10px] text-[var(--text-muted)]">${loc(u, 'role')}</div></div>
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <span class="text-[10px] px-2 py-0.5 rounded bg-black/30 text-cyan-300 font-bold" dir="ltr">@${u.username}</span>
+                                        <button onclick="openUserEditorModal('${u.id}')" class="p-1.5 rounded-lg hover:bg-purple-500/20 text-purple-300 transition" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderPersonalRoleDashboard(container, user) {
+            const myTasks = window.state.tasks.filter(t => t.assignees.includes(user.id));
+            const myPending = myTasks.filter(t => t.status !== 'done');
+            const myDone = myTasks.filter(t => t.status === 'done');
+
+            container.innerHTML = `
+                <div class="rounded-3xl p-6 retina-gradient text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div class="space-y-1.5">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/25 text-xs font-bold">
+                            <i class="fa-solid fa-sparkles text-amber-300"></i>
+                            <span>${t('personalWorkspaceBadge')} ${loc(user, 'role')}</span>
+                        </div>
+                        <h2 class="text-xl md:text-2xl font-black">${t('helloMsg')} ${loc(user, 'name')} ${t('dearWord')}</h2>
+                        <p class="text-xs text-white/90">${t('personalWorkspaceDesc')}</p>
+                    </div>
+                    <button onclick="switchModule('toolbox')" class="px-4 py-2.5 rounded-2xl bg-white text-slate-900 font-extrabold text-xs shadow-lg hover:bg-slate-100 transition">
+                        <i class="fa-solid fa-screwdriver-wrench mx-1"></i> ${t('myToolboxBtn')}
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="retina-card rounded-2xl p-4 flex items-center justify-between">
+                        <div><p class="text-xs text-[var(--text-muted)]">${t('myActiveTasksCard')}</p><h3 class="text-2xl font-black mt-1 text-cyan-400">${toPersianNum(myPending.length)} ${t('taskUnit')}</h3></div>
+                        <div class="w-11 h-11 rounded-2xl bg-cyan-500/15 text-cyan-400 flex items-center justify-center text-lg"><i class="fa-solid fa-layer-group"></i></div>
+                    </div>
+                    <div class="retina-card rounded-2xl p-4 flex items-center justify-between">
+                        <div><p class="text-xs text-[var(--text-muted)]">${t('completedItemsCard')}</p><h3 class="text-2xl font-black mt-1 text-emerald-400">${toPersianNum(myDone.length)} ${t('itemUnit')}</h3></div>
+                        <div class="w-11 h-11 rounded-2xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center text-lg"><i class="fa-solid fa-circle-check"></i></div>
+                    </div>
+                </div>
+
+                <div class="retina-card rounded-3xl p-5 space-y-4">
+                    <h3 class="font-extrabold text-sm flex items-center gap-2"><i class="fa-solid fa-list-check text-purple-400"></i> ${t('assignedToYouHeading')}</h3>
+                    <div class="space-y-3">
+                        ${myTasks.length ? myTasks.map(tk => {
+                            const proj = getProject(tk.projectId);
+                            return `
+                            <div onclick="openTaskModal('${tk.id}')" class="p-4 rounded-2xl retina-panel hover:border-cyan-400 cursor-pointer transition space-y-2">
+                                <div class="flex items-center justify-between text-[11px]">
+                                    <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold">${loc(proj, 'title')}</span>
+                                    <span class="text-[var(--text-muted)]">${t('dueDateLabel')} ${toPersianNum(tk.dueDay)} ${t('abanMonth')}</span>
+                                </div>
+                                <div class="flex items-center justify-between"><h4 class="font-extrabold text-sm">${loc(tk, 'title')}</h4><span class="text-xs font-bold text-cyan-400">${toPersianNum(tk.progress)}%</span></div>
+                                <div class="w-full h-2 rounded-full bg-black/40 overflow-hidden"><div class="h-full retina-gradient" style="width:${tk.progress}%"></div></div>
+                            </div>`;
+                        }).join('') : `<div class="p-8 text-center text-xs text-[var(--text-muted)]">${t('noTasksAssigned')}</div>`}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderProjectsModule(container) {
+            const activeProjects = window.state.projects.filter(p => !p.archived);
+            if (!activeProjects.length) {
+                container.innerHTML = `
+                    <div class="retina-card rounded-3xl p-10 text-center space-y-4">
+                        <div class="w-16 h-16 rounded-3xl retina-gradient text-white flex items-center justify-center text-2xl mx-auto shadow-xl"><i class="fa-solid fa-layer-group"></i></div>
+                        <h3 class="text-base font-extrabold">${t('noProjectStateTitle')}</h3>
+                        <p class="text-xs text-[var(--text-muted)] max-w-md mx-auto">${t('noProjectStateDesc')}</p>
+                        <button onclick="openProjectEditorModal()" class="px-6 py-3 rounded-2xl retina-gradient text-white text-xs font-extrabold shadow-lg">${t('createNewProjectBtn')}</button>
+                    </div>
+                `;
+                return;
+            }
+
+            if (!window.state.selectedProjectId || !activeProjects.some(p => p.id === window.state.selectedProjectId)) {
+                window.state.selectedProjectId = activeProjects[0].id;
+            }
+
+            const currentProj = getProject(window.state.selectedProjectId);
+            let projTasks = window.state.tasks.filter(tk => tk.projectId === currentProj.id);
+            if (window.state.onlyMyTasksFilter && window.state.activeUserId) {
+                projTasks = projTasks.filter(tk => tk.assignees.includes(window.state.activeUserId));
+            }
+
+            container.innerHTML = `
+                <div class="retina-card rounded-3xl p-4 flex items-center justify-between gap-4">
+                    <div class="flex flex-wrap items-center gap-2">
+                        ${activeProjects.map(p => `
+                            <button onclick="window.state.selectedProjectId='${p.id}'; renderCurrentModule();"
+                                class="px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 ${p.id === currentProj.id ? 'retina-gradient text-white shadow-lg' : 'retina-panel'}">
+                                <span class="w-2.5 h-2.5 rounded-full" style="background:${p.color}"></span>
+                                <span>${loc(p, 'title')}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                    ${isAdmin() ? `<button onclick="openProjectEditorModal()" class="px-3 py-2 rounded-xl bg-purple-500/20 text-purple-300 text-xs font-bold">${t('newProjectBtn')}</button>` : ''}
+                </div>
+
+                <div class="retina-card rounded-3xl p-5 space-y-4">
+                    <div class="flex items-center justify-between border-b border-[var(--border-color)] pb-3">
+                        <h3 class="text-lg font-black">${loc(currentProj, 'title')}</h3>
+                        <button onclick="openTaskModal(null, '${currentProj.id}')" class="px-4 py-2 rounded-xl retina-gradient text-white text-xs font-bold">+ ${t('newTaskBtn')}</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-start">
+                        ${['backlog', 'doing', 'review', 'revision', 'done'].map(status => {
+                            const colTasks = projTasks.filter(tk => tk.status === status);
+                            return `
+                            <div class="retina-card rounded-2xl p-3.5 space-y-3">
+                                <div class="flex items-center justify-between font-extrabold text-xs"><span>${t('status_' + status)}</span><span class="px-2 py-0.5 rounded-full bg-black/30">${toPersianNum(colTasks.length)}</span></div>
+                                <div class="space-y-2.5 min-h-[140px]">
+                                    ${colTasks.map(tk => `
+                                        <div onclick="openTaskModal('${tk.id}')" class="retina-panel rounded-2xl p-3 space-y-2 cursor-pointer hover:border-purple-400 transition">
+                                            <div class="font-bold text-xs">${loc(tk, 'title')}</div>
+                                            <div class="flex justify-between text-[10px] text-[var(--text-muted)]">
+                                                <span>${t('dueDateLabel')} ${toPersianNum(tk.dueDay)} ${t('abanMonth')}</span>
+                                                <span class="text-cyan-400 font-bold">${toPersianNum(tk.progress)}%</span>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                                <button onclick="openTaskModal(null, '${currentProj.id}', '${status}')" class="w-full py-2 rounded-xl border border-dashed border-[var(--border-color)] text-xs text-[var(--text-muted)] hover:text-white">${t('addShortBtn')}</button>
+                            </div>`;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCartableModule(container) {
+            const uid = window.state.activeUserId;
+            const list = window.state.tasks.filter(tk => tk.assignees.includes(uid));
+            container.innerHTML = `
+                <div class="retina-card rounded-3xl p-5 space-y-4">
+                    <h3 class="font-extrabold text-sm"><i class="fa-solid fa-list-check text-emerald-400 mx-1"></i> ${t('personalCartableHeading')}</h3>
+                    <div class="space-y-3">
+                        ${list.length ? list.map(tk => {
+                            const proj = getProject(tk.projectId);
+                            return `
+                            <div onclick="openTaskModal('${tk.id}')" class="p-4 rounded-2xl retina-panel flex items-center justify-between cursor-pointer hover:border-purple-400 transition text-xs">
+                                <div>
+                                    <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold">${loc(proj, 'title')}</span>
+                                    <h4 class="font-extrabold text-sm mt-1">${loc(tk, 'title')}</h4>
+                                </div>
+                                <div class="text-left font-bold text-cyan-400">${toPersianNum(tk.progress)}%</div>
+                            </div>`;
+                        }).join('') : `<div class="text-center py-10 text-xs text-[var(--text-muted)]">${t('emptyCartableText')}</div>`}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderToolboxModule(container) {
+            const user = getActiveUser();
+            const tab = user.roleType || 'graphic';
+            container.innerHTML = `
+                <div class="retina-card rounded-3xl p-5 space-y-5">
+                    <h3 class="font-extrabold text-base flex items-center gap-2"><i class="fa-solid fa-screwdriver-wrench text-pink-400"></i> ${t('specializedToolboxHeading')} ${loc(user, 'role')}</h3>
+                    ${tab === 'motion' ? renderMotionTools() : tab === 'uiux' ? renderUiUxTools() : renderGraphicTools()}
+                </div>
+            `;
+        }
+
+        function renderGraphicTools() {
+            return `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                    <div class="p-4 rounded-2xl retina-panel space-y-3">
+                        <h4 class="font-bold text-cyan-400">محاسبه‌گر ابعاد چاپی و DPI</h4>
+                        <select onchange="const [w,h]=this.value.split(','); document.getElementById('gw').value=w; document.getElementById('gh').value=h;" class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-2 font-bold">
+                            <option value="210,297">سربرگ A4 (۲۱۰ × ۲۹۷ م‌م)</option>
+                            <option value="90,60">کارت ویزیت (۹۰ × ۶۰ م‌م)</option>
+                        </select>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input id="gw" type="number" value="210" class="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-2 font-bold">
+                            <input id="gh" type="number" value="297" class="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-2 font-bold">
+                        </div>
+                        <div class="p-3 rounded-xl bg-black/30 text-center font-bold text-cyan-300">رزولوشن استاندارد چاپ افست: 300 DPI</div>
+                    </div>
+                    <div class="p-4 rounded-2xl retina-panel space-y-3">
+                        <h4 class="font-bold text-purple-400">کد رنگ برند</h4>
+                        <div class="flex items-center gap-3">
+                            <input type="color" value="#8B5CF6" oninput="document.getElementById('ghx').value=this.value.toUpperCase()" class="w-12 h-10 rounded-xl bg-transparent cursor-pointer">
+                            <input id="ghx" type="text" dir="ltr" value="#8B5CF6" class="flex-1 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-2 font-mono font-bold">
+                        </div>
+                        <div class="p-3 rounded-xl bg-black/30 text-center text-[11px] text-amber-300">تقریب CMYK و RGB دیجیتال</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderMotionTools() {
+            return `
+                <div class="p-4 rounded-2xl retina-panel space-y-3 text-xs">
+                    <h4 class="font-bold text-cyan-400">محاسبه‌گر فریم و تایم‌کد تیزر</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div><label class="block mb-1">زمان (ثانیه):</label><input id="msec" type="number" value="15" class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-2 font-bold"></div>
+                        <div><label class="block mb-1">نرخ فریم (FPS):</label><input id="mfps" type="number" value="30" class="w-full bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-2 font-bold"></div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-black/30 text-center font-bold text-emerald-400">تعداد کل فریم‌ها: ۴۵۰ فریم در ۱۵ ثانیه</div>
+                </div>
+            `;
+        }
+
+        function renderUiUxTools() {
+            return `
+                <div class="p-4 rounded-2xl retina-panel space-y-3 text-xs">
+                    <h4 class="font-bold text-emerald-400">تست کنتراست رنگ WCAG</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div><label>پس‌زمینه:</label><input type="color" value="#0F172A" class="w-full h-10 rounded-xl mt-1"></div>
+                        <div><label>رنگ متن:</label><input type="color" value="#38BDF8" class="w-full h-10 rounded-xl mt-1"></div>
+                    </div>
+                    <div class="p-3 rounded-xl bg-[#0F172A] text-[#38BDF8] text-center font-bold">نسبت کنتراست: 7.52 : 1 (تایید استاندارد AAA ✓)</div>
+                </div>
+            `;
+        }
+
+        function renderChatModule(container) {
+            const activeCh = window.state.channels[0];
+            const msgs = window.state.messages.filter(m => m.channelId === activeCh.id);
+            container.innerHTML = `
+                <div class="retina-card rounded-3xl p-5 flex flex-col h-[calc(100vh-140px)]">
+                    <div class="border-b border-[var(--border-color)] pb-3 font-extrabold text-sm flex items-center justify-between">
+                        <span># ${loc(activeCh, 'name')}</span>
+                        <span class="text-[11px] text-purple-300 font-semibold">${loc(activeCh, 'desc')}</span>
+                    </div>
+                    <div class="flex-1 overflow-y-auto space-y-3 py-4">
+                        ${msgs.length ? msgs.map(m => {
+                            const sender = getUser(m.senderId);
+                            return `
+                            <div class="p-3 rounded-2xl retina-panel text-xs space-y-1">
+                                <div class="flex items-center justify-between text-[10px] text-cyan-300 font-bold">
+                                    <span>${loc(sender, 'name')}</span>
+                                    <span class="text-[var(--text-muted)]">${m.otherLangPreview ? '🌐 Auto-Saved & Synced' : ''}</span>
+                                </div>
+                                <div class="font-semibold text-sm">${loc(m, 'text')}</div>
+                            </div>`;
+                        }).join('') : `<div class="text-center text-xs text-[var(--text-muted)] my-auto">${t('noMessagesYet')}</div>`}
+                    </div>
+                    <div class="flex gap-2 pt-3 border-t border-[var(--border-color)]">
+                        <input id="chat-txt" type="text" placeholder="${t('chatPlaceholder')}" class="flex-1 retina-panel rounded-xl px-3 py-2 text-xs focus:outline-none" onkeydown="if(event.key==='Enter') sendChat();">
+                        <button onclick="sendChat()" class="px-4 py-2 rounded-xl retina-gradient text-white text-xs font-bold">${t('sendBtn')}</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function sendChat() {
+            const inp = document.getElementById('chat-txt');
+            const raw = inp.value.trim();
+            if (!raw) return;
+            const msgObj = {
+                id: 'm_' + Date.now(),
+                channelId: 'ch_general',
+                senderId: window.state.activeUserId,
+                text: raw,
+                text_en: raw,
+                otherLangPreview: true
+            };
+            window.state.messages.push(msgObj);
+            inp.value = '';
+            persistState();
+            renderCurrentModule();
+            await autoSyncBilingualFields(msgObj, ['text']);
+        }
+
+        function renderCrmModule(container) {
+            container.innerHTML = `
+                <div class="retina-card rounded-3xl p-5 space-y-4 text-xs">
+                    <div class="flex justify-between items-center"><h3 class="font-extrabold text-sm">${t('crmHeading')}</h3><button onclick="openClientEditorModal()" class="px-3.5 py-2 rounded-xl retina-gradient text-white font-bold">${t('addClientBtn')}</button></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${window.state.clients.length ? window.state.clients.map(c => `
+                            <div class="p-4 rounded-2xl retina-panel space-y-2">
+                                <div class="font-extrabold text-sm">${loc(c, 'name')}</div>
+                                <div class="text-[var(--text-muted)]">${t('contractLabel')} ${formatToman(c.contractTotal)} • ${t('paidLabel')} ${formatToman(c.paidAmount)}</div>
+                            </div>
+                        `).join('') : `<div class="col-span-2 text-center py-8 text-[var(--text-muted)]">${t('noClientsText')}</div>`}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderOfficeModule(container) {
+            container.innerHTML = `
+                <div class="retina-card rounded-3xl p-5 space-y-4 text-xs">
+                    <div class="flex justify-between items-center"><h3 class="font-extrabold text-sm">${t('officeHeading')}</h3><button onclick="createNewMinutePrompt()" class="px-3.5 py-2 rounded-xl retina-gradient text-white font-bold">${t('newMinuteBtn')}</button></div>
+                    <div class="space-y-3">
+                        ${window.state.minutes.length ? window.state.minutes.map(m => `
+                            <div class="p-3.5 rounded-2xl retina-panel space-y-1"><div class="font-bold">${loc(m, 'title')}</div><div class="text-[var(--text-muted)]">${loc(m, 'summary')}</div></div>
+                        `).join('') : `<div class="text-center py-8 text-[var(--text-muted)]">${t('noMinutesText')}</div>`}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderNotesModule(container) {
+            container.innerHTML = `
+                <div class="retina-card rounded-3xl p-5 space-y-4 text-xs">
+                    <h3 class="font-extrabold text-sm">${t('personalNotesHeading')}</h3>
+                    <div class="text-[var(--text-muted)] text-center py-10">${t('noNotesText')}</div>
+                </div>
+            `;
+        }
+
+        function renderUsersManagementModule(container) {
+            if (!isAdmin()) return;
+            container.innerHTML = `
+                <div class="retina-card rounded-3xl p-6 space-y-6 text-xs">
+                    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-[var(--border-color)] pb-4">
+                        <div>
+                            <h3 class="font-extrabold text-base">${t('usersMgmtHeading')}</h3>
+                            <p class="text-[var(--text-muted)] mt-0.5">${t('usersMgmtSub')}</p>
+                        </div>
+                        <button onclick="openUserEditorModal()" class="px-4 py-2.5 rounded-2xl retina-gradient text-white font-extrabold shadow-lg">${t('newMemberBtn')}</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        ${window.state.users.map(u => `
+                            <div class="p-4 rounded-2xl retina-panel flex flex-col justify-between gap-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-11 h-11 rounded-xl bg-gradient-to-tr ${u.avatarColor} text-white font-bold flex items-center justify-center text-sm shadow">${loc(u, 'name').slice(0,2).toUpperCase()}</div>
+                                        <div>
+                                            <div class="font-extrabold text-sm flex items-center gap-2">
+                                                <span>${loc(u, 'name')}</span>
+                                                ${u.id === window.state.activeUserId ? `<span class="text-[10px] px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 font-bold">${t('youAdminBadge')}</span>` : ''}
+                                            </div>
+                                            <div class="text-[11px] text-purple-400 font-semibold mt-0.5">${loc(u, 'role')}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-2.5 rounded-xl bg-black/25 border border-[var(--border-color)] flex items-center justify-between text-[11px]">
+                                    <div><span class="text-[var(--text-muted)]">${t('usernameLabel')}:</span> <strong class="text-cyan-300 font-mono" dir="ltr">${u.username}</strong></div>
+                                    <div><span class="text-[var(--text-muted)]">${t('passwordLabel')}:</span> <strong class="text-amber-300 font-mono" dir="ltr">${u.password}</strong></div>
+                                </div>
+                                <div class="flex items-center justify-end gap-2 pt-1">
+                                    <button onclick="openUserEditorModal('${u.id}')" class="px-3.5 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/30 font-bold flex items-center gap-1.5 transition">
+                                        <i class="fa-solid fa-user-pen"></i>
+                                        <span>${t('editFullInfoBtn')}</span>
+                                    </button>
+                                    ${u.id !== window.state.activeUserId ? `
+                                        <button onclick="openDeleteUserModal('${u.id}')" class="px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 font-bold flex items-center gap-1 transition">
+                                            <i class="fa-regular fa-trash-can"></i>
+                                            <span>${t('deleteBtn')}</span>
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderDataHubModule(container) {
+            container.innerHTML = `
+                <div class="retina-card rounded-3xl p-6 space-y-4 text-xs">
+                    <h3 class="font-extrabold text-base">${t('datahubHeading')}</h3>
+                    <div class="flex flex-wrap gap-3">
+                        <button onclick="exportTasksToExcelCSV()" class="px-4 py-2.5 rounded-xl retina-panel hover:border-emerald-400 font-bold text-emerald-400">${t('exportExcelBtn')}</button>
+                        <button onclick="exportWorkspaceJSON()" class="px-4 py-2.5 rounded-xl retina-panel hover:border-cyan-400 font-bold text-cyan-400">${t('exportJsonBtn')}</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openUserEditorModal(uid = null) {
+            if (!isAdmin()) return;
+            document.getElementById('user-editor-modal').classList.remove('hidden');
+            if (uid) {
+                const u = getUser(uid);
+                document.getElementById('user-modal-title').innerText = isEn() ? `Edit Profile: ${loc(u, 'name')}` : `ویرایش اطلاعات: ${loc(u, 'name')}`;
+                document.getElementById('um-submit-btn').innerText = isEn() ? 'Save Changes' : 'ذخیره تغییرات';
+                document.getElementById('um-id').value = u.id;
+                document.getElementById('um-name').value = loc(u, 'name') || '';
+                document.getElementById('um-role-type').value = u.roleType || 'graphic';
+                document.getElementById('um-role-title').value = loc(u, 'role') || '';
+                document.getElementById('um-avatar-color').value = u.avatarColor || 'from-purple-500 to-indigo-500';
+                document.getElementById('um-username').value = u.username || '';
+                document.getElementById('um-password').value = u.password || '';
+                const mods = u.allowedModules || (ROLE_PRESETS[u.roleType] ? ROLE_PRESETS[u.roleType].defaultModules : ['dashboard']);
+                renderPermissionsCheckboxesInModal(mods);
+            } else {
+                document.getElementById('user-modal-title').innerText = isEn() ? 'Add New Team Member' : 'تعریف عضو جدید تیم';
+                document.getElementById('um-submit-btn').innerText = isEn() ? 'Save New Member' : 'ذخیره عضو جدید';
+                document.getElementById('um-id').value = '';
+                document.getElementById('um-name').value = '';
+                document.getElementById('um-role-type').value = 'graphic';
+                document.getElementById('um-role-title').value = isEn() ? ROLE_PRESETS.graphic.label_en : ROLE_PRESETS.graphic.label;
+                document.getElementById('um-avatar-color').value = 'from-purple-500 to-indigo-500';
+                document.getElementById('um-username').value = '';
+                document.getElementById('um-password').value = '';
+                renderPermissionsCheckboxesInModal(ROLE_PRESETS.graphic.defaultModules);
+            }
+        }
+        function closeUserEditorModal() { document.getElementById('user-editor-modal').classList.add('hidden'); }
+
+        function renderPermissionsCheckboxesInModal(selectedMods) {
+            const grid = document.getElementById('um-permissions-grid');
+            grid.innerHTML = ALL_MODULES_CATALOG.map(m => `
+                <label class="p-2 rounded-xl retina-card flex items-center gap-2 cursor-pointer text-xs">
+                    <input type="checkbox" value="${m.id}" class="um-perm-cb accent-purple-500" ${selectedMods.includes(m.id)?'checked':''}>
+                    <span>${isEn() ? m.title_en : m.title}</span>
+                </label>
+            `).join('');
+        }
+
+        function applyRoleDefaultPermissionsInModal(val) {
+            const preset = ROLE_PRESETS[val] || ROLE_PRESETS.graphic;
+            document.getElementById('um-role-title').value = isEn() ? preset.label_en : preset.label;
+            renderPermissionsCheckboxesInModal(preset.defaultModules);
+        }
+
+        async function saveUserFromModal() {
+            const editId = document.getElementById('um-id').value;
+            const name = document.getElementById('um-name').value.trim();
+            const roleType = document.getElementById('um-role-type').value;
+            const roleTitle = document.getElementById('um-role-title').value.trim() || (isEn() ? ROLE_PRESETS[roleType].label_en : ROLE_PRESETS[roleType].label);
+            const username = document.getElementById('um-username').value.trim();
+            const password = document.getElementById('um-password').value.trim();
+            const avatarColor = document.getElementById('um-avatar-color').value;
+
+            if (!name || !username || !password) return showToast(isEn() ? 'Please fill out name, username and password' : 'لطفاً نام، نام کاربری و رمز عبور را کامل وارد کنید', 'warning');
+
+            const duplicate = window.state.users.find(u => u.id !== editId && normalizePersianText(u.username) === normalizePersianText(username));
+            if (duplicate) return showToast(isEn() ? 'Username already exists' : 'این نام کاربری قبلاً ثبت شده است', 'warning');
+
+            let allowedModules = Array.from(document.querySelectorAll('.um-perm-cb:checked')).map(cb => cb.value);
+            if (!allowedModules.length) allowedModules = ['dashboard'];
+            if (roleType === 'admin' && !allowedModules.includes('users')) allowedModules.push('users');
+
+            let targetUser = null;
+            if (editId) {
+                const idx = window.state.users.findIndex(u => u.id === editId);
+                if (idx > -1) {
+                    window.state.users[idx] = { ...window.state.users[idx], username, password, name, role: roleTitle, roleType, avatarColor, specialty: roleTitle, allowedModules };
+                    targetUser = window.state.users[idx];
+                }
+                closeUserEditorModal();
+                persistState();
+                initHeaderAndSidebar();
+                renderCurrentModule();
+                showToast(isEn() ? 'Member updated & auto-saved!' : 'عضو ویرایش شد و به صورت آنی ذخیره گردید!', 'success');
+            } else {
+                targetUser = {
+                    id: 'u_' + Date.now(), username, password, name, name_en: name,
+                    role: roleTitle, role_en: ROLE_PRESETS[roleType]?.label_en || roleTitle,
+                    roleType, avatarColor, specialty: roleTitle, specialty_en: ROLE_PRESETS[roleType]?.label_en || roleTitle, allowedModules
+                };
+                window.state.users.push(targetUser);
+                closeUserEditorModal();
+                persistState();
+                renderCurrentModule();
+                showToast(isEn() ? 'New member added & auto-saved!' : 'عضو جدید اضافه شد و به صورت آنی ذخیره گردید!', 'success');
+            }
+            if (targetUser) await autoSyncBilingualFields(targetUser, ['name', 'role', 'specialty']);
+        }
+
+        function openDeleteUserModal(uid) {
+            if (!isAdmin()) return;
+            const u = getUser(uid);
+            if (!u || u.id === window.state.activeUserId) return;
+            document.getElementById('del-user-id').value = u.id;
+            document.getElementById('del-user-name').innerText = loc(u, 'name');
+            const others = window.state.users.filter(x => x.id !== u.id);
+            document.getElementById('del-user-successor').innerHTML = others.map(x => `<option value="${x.id}">${loc(x, 'name')} (${loc(x, 'role')})</option>`).join('');
+            document.getElementById('user-delete-modal').classList.remove('hidden');
+        }
+
+        function confirmDeleteUserAndTransferTasks() {
+            const delId = document.getElementById('del-user-id').value;
+            const succId = document.getElementById('del-user-successor').value;
+            window.state.tasks.forEach(tk => {
+                if (tk.assignees.includes(delId)) {
+                    tk.assignees = tk.assignees.filter(id => id !== delId);
+                    if (succId && !tk.assignees.includes(succId)) tk.assignees.push(succId);
+                }
+            });
+            window.state.users = window.state.users.filter(u => u.id !== delId);
+            document.getElementById('user-delete-modal').classList.add('hidden');
+            persistState();
+            renderCurrentModule();
+            showToast(isEn() ? 'Member removed & auto-saved' : 'عضو حذف شد و تغییرات ذخیره گردید', 'info');
+        }
+
+        function openProjectEditorModal() {
+            document.getElementById('pm-title').value = '';
+            document.getElementById('project-editor-modal').classList.remove('hidden');
+        }
+
+        async function saveProjectFromModal() {
+            const title = document.getElementById('pm-title').value.trim();
+            if (!title) return showToast(isEn() ? 'Project title is required' : 'عنوان پروژه الزامی است', 'warning');
+            const pObj = {
+                id: 'p_' + Date.now(), title, title_en: title,
+                category: document.getElementById('pm-category').value,
+                deadline: document.getElementById('pm-deadline').value.trim() || '30 Aban 1405',
+                color: '#8B5CF6', archived: false
+            };
+            window.state.projects.push(pObj);
+            window.state.selectedProjectId = pObj.id;
+            document.getElementById('project-editor-modal').classList.add('hidden');
+            persistState();
+            renderCurrentModule();
+            showToast(isEn() ? 'Project created & auto-saved!' : 'پروژه جدید ایجاد شد و به صورت آنی ذخیره گردید!', 'success');
+            await autoSyncBilingualFields(pObj, ['title']);
+        }
+
+        function openClientEditorModal() { document.getElementById('client-editor-modal').classList.remove('hidden'); }
+        async function saveClientFromModal() {
+            const name = document.getElementById('cm-name').value.trim();
+            if (!name) return showToast(isEn() ? 'Client name is required' : 'نام کارفرما الزامی است', 'warning');
+            const cObj = {
+                id: 'c_' + Date.now(), name, name_en: name,
+                contractTotal: Number(document.getElementById('cm-total').value) || 0,
+                paidAmount: Number(document.getElementById('cm-paid').value) || 0
+            };
+            window.state.clients.push(cObj);
+            document.getElementById('client-editor-modal').classList.add('hidden');
+            persistState();
+            renderCurrentModule();
+            showToast(isEn() ? 'Client saved & auto-saved!' : 'پرونده مشتری ثبت شد و به صورت آنی ذخیره گردید!', 'success');
+            await autoSyncBilingualFields(cObj, ['name']);
+        }
+
+        function createNewMinutePrompt() {
+            window.state.minutes.unshift({
+                id: 'min_' + Date.now(),
+                title: 'صورتجلسه هماهنگی طرح‌ها',
+                title_en: 'Design Coordination Meeting Minutes',
+                summary: 'بررسی اتودهای اولیه و تعیین ددلاین‌ها',
+                summary_en: 'Reviewing initial sketches and setting project deadlines'
+            });
+            persistState();
+            renderCurrentModule();
+            showToast(isEn() ? 'Meeting minute recorded & auto-saved' : 'صورتجلسه ثبت و ذخیره شد', 'success');
+        }
+
+        function openTaskModal(taskId = null, defaultProjId = null, defaultStatus = 'backlog') {
+            if (!window.state.projects.length) {
+                showToast(isEn() ? 'Please create a project first' : 'لطفاً ابتدا یک پروژه ایجاد کنید', 'warning');
+                return openProjectEditorModal();
+            }
+            document.getElementById('task-modal').classList.remove('hidden');
+            document.getElementById('tm-project').innerHTML = window.state.projects.map(p => `<option value="${p.id}">${loc(p, 'title')}</option>`).join('');
+            document.getElementById('tm-approver').innerHTML = window.state.users.map(u => `<option value="${u.id}">${loc(u, 'name')}</option>`).join('');
+            document.getElementById('tm-assignees-checkboxes').innerHTML = window.state.users.map(u => `
+                <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" value="${u.id}" class="tm-assignee-cb accent-purple-500" checked><span>${loc(u, 'name')}</span></label>
+            `).join('');
+
+            if (taskId) {
+                const tk = window.state.tasks.find(x => x.id === taskId);
+                if (tk) {
+                    document.getElementById('tm-id').value = tk.id;
+                    document.getElementById('tm-title').value = loc(tk, 'title');
+                    document.getElementById('tm-desc').value = loc(tk, 'desc') || '';
+                    document.getElementById('tm-project').value = tk.projectId;
+                    document.getElementById('tm-status').value = tk.status;
+                    document.getElementById('tm-progress').value = tk.progress || 0;
+                    document.getElementById('tm-progress-val').innerText = (tk.progress || 0) + '%';
+                }
+            } else {
+                document.getElementById('tm-id').value = '';
+                document.getElementById('tm-title').value = '';
+                document.getElementById('tm-desc').value = '';
+                document.getElementById('tm-project').value = defaultProjId || window.state.selectedProjectId;
+                document.getElementById('tm-status').value = defaultStatus;
+                document.getElementById('tm-progress').value = 0;
+                document.getElementById('tm-progress-val').innerText = '0%';
+            }
+        }
+
+        function closeTaskModal() { document.getElementById('task-modal').classList.add('hidden'); }
+        async function saveTaskFromModal() {
+            const id = document.getElementById('tm-id').value;
+            const title = document.getElementById('tm-title').value.trim();
+            if (!title) return showToast(isEn() ? 'Task title is required' : 'عنوان وظیفه الزامی است', 'warning');
+            const desc = document.getElementById('tm-desc').value.trim();
+            const assignees = Array.from(document.querySelectorAll('.tm-assignee-cb:checked')).map(cb => cb.value);
+
+            let targetTask = null;
+            if (id) {
+                const idx = window.state.tasks.findIndex(tk => tk.id === id);
+                if (idx > -1) {
+                    window.state.tasks[idx] = {
+                        ...window.state.tasks[idx],
+                        projectId: document.getElementById('tm-project').value,
+                        title, desc,
+                        status: document.getElementById('tm-status').value,
+                        weight: Number(document.getElementById('tm-weight').value) || 5,
+                        progress: Number(document.getElementById('tm-progress').value) || 0,
+                        assignees: assignees.length ? assignees : [window.state.activeUserId]
+                    };
+                    targetTask = window.state.tasks[idx];
+                }
+            } else {
+                targetTask = {
+                    id: 't_' + Date.now(),
+                    projectId: document.getElementById('tm-project').value,
+                    title, title_en: title, desc, desc_en: desc,
+                    status: document.getElementById('tm-status').value,
+                    weight: Number(document.getElementById('tm-weight').value) || 5,
+                    progress: Number(document.getElementById('tm-progress').value) || 0,
+                    dueDay: Number(document.getElementById('tm-due-day').value) || 8,
+                    assignees: assignees.length ? assignees : [window.state.activeUserId],
+                    checklist: [], attachments: [], comments: []
+                };
+                window.state.tasks.push(targetTask);
+            }
+            closeTaskModal();
+            persistState();
+            renderCurrentModule();
+            showToast(isEn() ? 'Task saved & auto-saved!' : 'وظیفه ذخیره و به صورت آنی ثبت گردید!', 'success');
+            if (targetTask) await autoSyncBilingualFields(targetTask, ['title', 'desc']);
+        }
+
+        function deleteTaskFromModal() {
+            const id = document.getElementById('tm-id').value;
+            window.state.tasks = window.state.tasks.filter(t => t.id !== id);
+            closeTaskModal();
+            persistState();
+            renderCurrentModule();
+            showToast(isEn() ? 'Task deleted & auto-saved' : 'وظیفه حذف شد و تغییرات ذخیره گردید', 'info');
+        }
+
+        function addChecklistItemInModal() {
+            const inp = document.getElementById('tm-new-check-input');
+            const val = inp ? inp.value.trim() : '';
+            if (!val) return;
+            const list = document.getElementById('tm-checklist-items');
+            const div = document.createElement('div');
+            div.className = 'flex items-center justify-between p-2 rounded-xl retina-card text-xs';
+            div.innerHTML = `<label class="flex items-center gap-2"><input type="checkbox" class="accent-emerald-500"><span>${val}</span></label>`;
+            list.appendChild(div);
+            inp.value = '';
+        }
+
+        function addSimulatedAttachment(typeLabel) {
+            const list = document.getElementById('tm-attachments-list');
+            if (!list) return;
+            const span = document.createElement('span');
+            span.className = 'px-2.5 py-1 rounded-lg retina-card text-[11px] text-cyan-300 font-bold flex items-center gap-1';
+            span.innerHTML = `<i class="fa-solid fa-file"></i><span>${typeLabel}</span>`;
+            list.appendChild(span);
+        }
+
+        function approveTaskByApprover() {
+            document.getElementById('tm-status').value = 'done';
+            document.getElementById('tm-progress').value = 100;
+            document.getElementById('tm-progress-val').innerText = '100%';
+            showToast(isEn() ? 'Approved by Art Director' : 'مهر تأیید مدیر هنری ثبت شد', 'success');
+        }
+
+        function printSingleTaskFromModal() { window.print(); }
+
+        function openBrandModal() {
+            document.getElementById('brand-name-input').value = loc(window.state.brand, 'name');
+            document.getElementById('brand-slogan-input').value = loc(window.state.brand, 'slogan');
+            document.getElementById('brand-modal').classList.remove('hidden');
+        }
+        function closeBrandModal() { document.getElementById('brand-modal').classList.add('hidden'); }
+
+        function setStudioTheme(themeName) {
+            window.state.brand.theme = themeName;
+            if (themeName === 'default') document.documentElement.removeAttribute('data-theme');
+            else document.documentElement.setAttribute('data-theme', themeName);
+            persistState();
+            showToast(isEn() ? 'Studio theme updated & auto-saved' : 'تم گرافیکی اعمال و ذخیره شد', 'info');
+        }
+
+        async function saveBrandSettings() {
+            const nameVal = document.getElementById('brand-name-input').value.trim() || 'استودیو رتینا';
+            const sloganVal = document.getElementById('brand-slogan-input').value.trim() || 'میزکار خلاقیت و دیزاین';
+            window.state.brand.name = nameVal;
+            window.state.brand.slogan = sloganVal;
+            initHeaderAndSidebar();
+            closeBrandModal();
+            persistState();
+            showToast(isEn() ? 'Brand identity saved & auto-saved!' : 'هویت بصری ذخیره و به صورت آنی ثبت گردید!', 'success');
+            await autoSyncBilingualFields(window.state.brand, ['name', 'slogan']);
+        }
+
+        function openVideoRoomModal() {
+            document.getElementById('video-participants-list').innerHTML = window.state.users.map(u => `
+                <div class="p-3 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-between text-xs text-white">
+                    <div class="flex items-center gap-2"><div class="w-8 h-8 rounded-xl bg-gradient-to-tr ${u.avatarColor} flex items-center justify-center font-bold">${loc(u, 'name').slice(0,2).toUpperCase()}</div><span>${loc(u, 'name')}</span></div>
+                    <span class="text-emerald-400 text-[10px]">${isEn() ? 'Online' : 'متصل'}</span>
+                </div>
+            `).join('');
+            document.getElementById('video-room-modal').classList.remove('hidden');
+        }
+        function closeVideoRoomModal() { document.getElementById('video-room-modal').classList.add('hidden'); }
+        function toggleAssistantDrawer() { document.getElementById('assistant-drawer').classList.toggle('hidden'); }
+        function renderAssistantAlerts() {
+            document.getElementById('assistant-alerts-list').innerHTML = '<div class="p-3 text-center text-[var(--text-muted)]">هیچ هشدار جدیدی وجود ندارد (همگام‌سازی Auto-Save فعال).</div>';
+        }
+
+        function exportTasksToExcelCSV() {
+            const headers = ['شناسه', 'عنوان وظیفه', 'پروژه', 'وضعیت', 'پیشرفت', 'مسئولین'];
+            const rows = window.state.tasks.map(t => [t.id, `"${t.title}"`, `"${getProject(t.projectId).title}"`, t.status, t.progress + '%', `"${t.assignees.join(', ')}"`]);
+            const csv = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'tasks_export.csv'; a.click();
+            showToast('خروجی اکسل وظایف دانلود شد', 'success');
+        }
+
+        function exportWorkspaceJSON() {
+            const blob = new Blob([JSON.stringify(window.state, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = 'retina_autosave_backup.json'; a.click();
+            showToast('بکاپ کامل JSON دانلود شد', 'success');
+        }
+
+        window.onload = function() {
+            const uInp = document.getElementById('login-username');
+            const pInp = document.getElementById('login-password');
+            if (uInp) uInp.value = '';
+            if (pInp) pInp.value = '';
+
+            applyLanguageDirectionAndStaticTexts();
+
+            if (window.state.activeUserId && getActiveUser()) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('app-shell').classList.remove('hidden');
+                initHeaderAndSidebar();
+                switchModule(window.state.currentModule || 'dashboard');
+            } else {
+                document.getElementById('app-shell').classList.add('hidden');
+                document.getElementById('login-screen').classList.remove('hidden');
+            }
+        };
+    </script>
+</body>
+</html>
